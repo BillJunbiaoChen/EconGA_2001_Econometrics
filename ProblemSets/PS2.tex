@@ -1,0 +1,229 @@
+\documentclass[11pt]{article}
+
+%%METADATA
+\title{GA2001 Econometrics \\Solution to Problem Set 2}
+\author{
+Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
+}
+\date{\today}
+
+
+%%PACKAGES
+\usepackage{mdframed} % For boxed environments
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{setspace}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[hyphens]{url}
+\usepackage{natbib}
+\usepackage[font=normalsize,labelfont=bf]{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue}
+\usepackage{stmaryrd}  %Package with \boxast command
+\usepackage{enumerate}% http://ctan.org/pkg/enumerate %Supports lowercase Roman-letter enumeration
+\usepackage{verbatim} %Package with \begin{comment} environment
+%\usepackage{enumitem}
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{upquote}
+\usepackage{booktabs} %Package with \toprule and \bottomrule
+\usepackage{etoc}     %Package with \localtableofcontents
+\usepackage{placeins}    %Package that prevent repositioning the tables
+\usepackage{multicol}
+\usepackage{bm}
+\usepackage{subfig}
+\usepackage{csquotes}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=bash,
+  frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=3
+}
+
+\lstset{language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4
+}
+
+\definecolor{lightblue}{rgb}{0.68, 0.85, 0.9} %
+
+%CUSTOM DEFINITIONS
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{remark}{Remark}
+\setcounter{secnumdepth}{3}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{automata, positioning, arrows, calc}
+
+\tikzset{
+	->,  % makes the edges directed
+	>=stealth, % makes the arrow heads bold
+	shorten >=2pt, shorten <=2pt, % shorten the arrow
+	node distance=3cm, % specifies the minimum distance between two nodes. Change if n
+	every state/.style={draw=blue!55,very thick,fill=blue!20}, % sets the properties for each ’state’ n
+	initial text=$ $, % sets the text that appears on the start arrow
+ }
+
+%% PROPOSITION
+% Define the Proposition environment
+\newmdenv[
+  innerleftmargin=10pt, 
+  innerrightmargin=10pt,
+  innertopmargin=10pt,
+  innerbottommargin=10pt,
+  linecolor=black, 
+  linewidth=1pt,
+  backgroundcolor=white, 
+  roundcorner=5pt
+]{propositionbox}
+
+\newtheoremstyle{boldtitle} % Define a new theorem style
+  {10pt} % Space above
+  {10pt} % Space below
+  {\itshape} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  { } % Space after theorem head
+  {} % Theorem head spec
+
+\theoremstyle{boldtitle} % Use the custom style
+\newtheorem{proposition}{Proposition} % Define the proposition environment
+
+% Redefine the proposition environment to use the box
+\newenvironment{boxedproposition}[1][]
+{\begin{propositionbox}\begin{proposition}[#1]}
+{\end{proposition}\end{propositionbox}}
+
+%%FORMATTING
+\usepackage[bottom]{footmisc}
+\onehalfspacing
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\bibliographystyle{../bib/aeanobold-oxford}
+
+
+%main text
+\begin{document}
+\maketitle
+\section*{Problem 1.}
+\paragraph{1.} Take $S \in \{A \subseteq \Omega': f^{-1}(A) \in \mathcal{F}\}$,
+we have $S^c = \Omega' \backslash S$, and $f^{-1} (\Omega'\backslash S) = \Omega \backslash f^{-1} (S) \in \mathcal{F}$. (Closed under complementation.)
+Then, we can also show that 
+$f^{-1}(\bigcup_{i \in \mathbb{N}} S_i) =  \bigcup_{i \in \mathbb{N}} f^{-1}(S_i) \in \mathcal{F}$. (Closed under countable union.)
+This concludes that $\mathcal{P}$ is a $\sigma$-algebra.
+
+\paragraph{2.}
+
+
+
+
+
+\section*{Problem 2.} 
+\paragraph{1.} By the definition of measurable functions, we have 
+for any $A \in \mathcal{G}$, $f^{-1}(A) \in \mathcal{F}$, 
+and for any $B \in \mathcal{H}$, $g^{-1}(B) \in \mathcal{G}$.
+Now, consider a function $f^{-1}(g^{-1}(.))$, we have 
+for any $B \in \mathcal{H}$, $f^{-1}(g^{-1}(B)) \in \mathcal{F}$ because $g^{-1}(B) \in \mathcal{G}$.
+\(\blacksquare\)
+
+\paragraph{2.}
+
+
+\paragraph{3.} Since $X$ is a random variable, we know that $X$ is a $\Omega \backslash \mathbb{R}$-measurable function.
+Also, in the clase, we prove that 
+\[
+\mathcal{F}_X \subseteq \mathcal{F}_Y \text{ iff } \exists g: \mathbb{R}^{\text{dim} Y} \rightarrow \mathbb{R}^{\text{dim} X}
+\]
+Notice that $\mathbb{R}_{+} \subseteq \mathbb{R}$, there exists a function $g_+: \mathbb{R} \rightarrow \mathbb{R}_{+}$.
+Since both $X$ and $g_+$ are measurable, by Problem 2. (1), we have $(X \circ g_+)$ is $\Omega \backslash \mathbb{R}_+$-measurable.
+Thus, $X^+(\omega)$ is a random variable.
+Similarily, we have $(X \circ g_-)$ is $\Omega \backslash \mathbb{R}_-$-measurable, where $g_-: \mathbb{R} \rightarrow \mathbb{R}_-$.
+\(\blacksquare\)
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[node distance=2.5cm, auto]
+
+  % Nodes
+  \node (omega) at (0, 0) {\( \Omega \)};
+  \node (R) at (3, 0) {\( \mathbb{R} \)};
+  \node (Rplus) at (6, 1.5) {\( \mathbb{R}_+ \)};
+  \node (Rminus) at (6, -1.5) {\( \mathbb{R}_- \)};
+  
+  % Arrows
+  \draw[->, thick] (omega) -- node[above] {\( X \)} (R);
+  \draw[->, thick] (R) -- node[above right] {\( g_+ \)} (Rplus);
+  \draw[->, thick] (R) -- node[below right] {\( g_- \)} (Rminus);
+
+\end{tikzpicture}
+\end{figure}
+
+\section*{Problem 3.} 
+\paragraph{1.} (a) ``Non-negativity'': $P_X (B) \geq 0$ for any $B \in \mathcal{B}(\mathbb{R})$ as the codomain is $[0,1]$.
+
+(b) ``Countable-additivity'': Let $\{B_i\} \in \mathcal{B}(\mathbb{R})$ be a collection of disjoint sets.
+$P_X (\sqcup B_i) = P(X^{-1} (\sqcup B_i) ) = P(\sqcup X^{-1} (B_i) ) = \sum_i P(X^{-1} (B_i) ) = \sum_i P_X(B_i)$.
+
+(c) Finally, we have $P_X (\mathbb{R}) = P(X^{-1} (\mathbb{R})) = P(\Omega) = 1$.
+The last equation, $P(\Omega) = 1$, holds because $P$ is a probability space.
+
+
+\paragraph{2.} 
+Let $s, t \in \mathbb{R}$ with $s > t$.
+We have 
+\begin{align*}
+  F_X(s) - F_X(t) & = P_X(-\infty, s] - P_X(-\infty, t] \\ 
+    & = P(X^{-1}(-\infty, s]) - P(X^{-1}(-\infty, t]) \\ 
+    & = P(X^{-1}(t, s]) > 0
+\end{align*}
+Take $t \in \mathbb{R}$, consider a sequence of intervals such that 
+$\{A_n: (-\infty, t + \frac{1}{n}) \}_{n=1}^\infty$.
+Note that $A_n$ is decreasing, i.e., $A_1 \supset A_2 \supset A_3 \ldots$.
+Therefore, we have $\lim_{x \rightarrow t^+} F_X(x) = F_X(\bigcap_{n=1}^\infty A_n) = F_X((-\infty, t]) = F_X(t)$.
+\textbf{Thus, $F_X$ is right-continous}.
+
+Take $m, t \in \mathbb{R}$ and $ m > t$, we have $F_X((\infty, m]) = F_X((\infty, t]) + F_X((t, m])$.
+As $t \rightarrow -\infty$, $F_X((\infty, m]) = F_X((t, m])$,
+therefore, 
+\[
+F_X((-\infty, t]) = F_X((\infty, m]) - F_X((t, m]) = 0.
+\]
+
+As $t \rightarrow \infty$, $F_X(t) = P_X(\mathbb{R}) = 1$.
+%% =========== %% ========= %%
+\bibliography{../bib/notes.bib}
+
+\end{document}
