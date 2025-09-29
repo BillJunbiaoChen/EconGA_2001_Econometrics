@@ -145,7 +145,10 @@ Then, we can also show that
 $f^{-1}(\bigcup_{i \in \mathbb{N}} S_i) =  \bigcup_{i \in \mathbb{N}} f^{-1}(S_i) \in \mathcal{F}$. (Closed under countable union.)
 This concludes that $\mathcal{P}$ is a $\sigma$-algebra.
 
-\paragraph{2.}
+\paragraph{2.} Since $\mathcal{F}$ is a sigma-algebra, 
+$\sigma(\mathcal{F}) \subseteq \mathcal{F}$.
+It follows that, for any $A \in \mathcal{F}$, we have $A \in \sigma(\mathcal{F})$,
+therefore, $\mathcal{F}\backslash \mathcal{A}$-measurable implies $\mathcal{F}\backslash \mathcal{\sigma(A)}$-measurable.
 
 
 
@@ -160,6 +163,12 @@ for any $B \in \mathcal{H}$, $f^{-1}(g^{-1}(B)) \in \mathcal{F}$ because $g^{-1}
 \(\blacksquare\)
 
 \paragraph{2.}
+Let $h: \mathcal{B}(\mathbb{R}^2) \rightarrow \mathcal{B}(\mathbb{R})$.
+Since for each $B \in \mathcal{B}(\mathbb{R})$, we can find $h^{-1}(B) \in \mathcal{B}(\mathbb{R}^2)$,
+$h$ is a $\mathcal{B}(\mathbb{R}^2)\backslash \mathcal{B}(\mathbb{R})$-measurable function.
+By \textbf{1.}, we know that the composition of measurable functions is measurable.
+Therefore, $\omega \circ h$ is $\mathcal{F}\backslash \mathcal{B}(\mathbb{R})$-measrable.
+In conclusion, $f+g$ and $fg$ are Borel-measurable. \(\blacksquare\)
 
 
 \paragraph{3.} Since $X$ is a random variable, we know that $X$ is a $\Omega \backslash \mathbb{R}$-measurable function.
@@ -223,6 +232,30 @@ F_X((-\infty, t]) = F_X((\infty, m]) - F_X((t, m]) = 0.
 \]
 
 As $t \rightarrow \infty$, $F_X(t) = P_X(\mathbb{R}) = 1$.
+
+
+\section*{Problem 4.} 
+\paragraph{1.} Note that $\mathbb{E}(Y) = Y$ if $Y$ is constant.
+If follows that $\mathbb{E}(XY) = Y \mathbb{E}(X) = \mathbb{E}(Y) \mathbb{E}(X)$.
+Note that the first equality is due to definition of expectation.
+Similarily, $\mathbb{E}(X=YY) = Y \mathbb{E}(Y) = \mathbb{E}(Y) \mathbb{E}(Y)$.
+Therefore, if $Y$ is constant, then $X$ and $Y$ are independent.
+$Y$ and $Y$ are independent. \(\blacksquare\)
+
+\paragraph{2.} I apply Fubini's theorem to prove that if $X$ and $Y$ are 
+independent then $\mathbb{E}(f(X)g(Y)) = \mathbb{E}(f(X)) \mathbb{E}(g(Y))$.
+
+\textbf{Proof} 
+\begin{align*}
+  \mathbb{E}(f(X)g(Y)) & = \int_{\mathbb{R}^2} f(x)g(y) (\mu \times v) (dx \times dy) \\
+  & = \int_{\mathbb{R}}\bigg(\int_{\mathbb{R}} f(x)g(y)\mu dx \bigg) v dy \\
+  & = \int_{\mathbb{R}}g(y) \bigg(\int_{\mathbb{R}} f(x)\mu dx \bigg) v dy \\
+  & = \int_{\mathbb{R}}g(y) \mathbb{E}(f(X)) v dy \\
+  & = \mathbb{E}(f(X))  \int_{\mathbb{R}}g(y) v dy \\
+  & = \mathbb{E}(f(X)) \mathbb{E}(g(Y)) 
+\end{align*}
+\(\blacksquare\)
+
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
 
