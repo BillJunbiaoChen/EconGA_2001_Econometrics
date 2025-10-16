@@ -1,0 +1,282 @@
+\documentclass[11pt]{article}
+
+%%METADATA
+\title{GA2001 Econometrics \\Solution to Problem Set 4}
+\author{
+Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
+}
+\date{\today}
+
+
+%%PACKAGES
+\usepackage{mdframed} % For boxed environments
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{setspace}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[hyphens]{url}
+\usepackage{natbib}
+\usepackage[font=normalsize,labelfont=bf]{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue}
+\usepackage{stmaryrd}  %Package with \boxast command
+\usepackage{enumerate}% http://ctan.org/pkg/enumerate %Supports lowercase Roman-letter enumeration
+\usepackage{verbatim} %Package with \begin{comment} environment
+%\usepackage{enumitem}
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{upquote}
+\usepackage{booktabs} %Package with \toprule and \bottomrule
+\usepackage{etoc}     %Package with \localtableofcontents
+\usepackage{placeins}    %Package that prevent repositioning the tables
+\usepackage{multicol}
+\usepackage{bm}
+\usepackage{subfig}
+\usepackage{csquotes}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=bash,
+  frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=3
+}
+
+\lstset{language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4
+}
+
+\definecolor{lightblue}{rgb}{0.68, 0.85, 0.9} %
+
+%CUSTOM DEFINITIONS
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{remark}{Remark}
+\setcounter{secnumdepth}{3}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{automata, positioning, arrows, calc}
+
+\tikzset{
+	->,  % makes the edges directed
+	>=stealth, % makes the arrow heads bold
+	shorten >=2pt, shorten <=2pt, % shorten the arrow
+	node distance=3cm, % specifies the minimum distance between two nodes. Change if n
+	every state/.style={draw=blue!55,very thick,fill=blue!20}, % sets the properties for each ’state’ n
+	initial text=$ $, % sets the text that appears on the start arrow
+ }
+
+%% PROPOSITION
+% Define the Proposition environment
+\newmdenv[
+  innerleftmargin=10pt, 
+  innerrightmargin=10pt,
+  innertopmargin=10pt,
+  innerbottommargin=10pt,
+  linecolor=black, 
+  linewidth=1pt,
+  backgroundcolor=white, 
+  roundcorner=5pt
+]{propositionbox}
+
+\newtheoremstyle{boldtitle} % Define a new theorem style
+  {10pt} % Space above
+  {10pt} % Space below
+  {\itshape} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  { } % Space after theorem head
+  {} % Theorem head spec
+
+\theoremstyle{boldtitle} % Use the custom style
+\newtheorem{proposition}{Proposition} % Define the proposition environment
+
+% Redefine the proposition environment to use the box
+\newenvironment{boxedproposition}[1][]
+{\begin{propositionbox}\begin{proposition}[#1]}
+{\end{proposition}\end{propositionbox}}
+
+%%FORMATTING
+\usepackage[bottom]{footmisc}
+\onehalfspacing
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\bibliographystyle{../bib/aeanobold-oxford}
+
+
+%main text
+\begin{document}
+\maketitle
+\section*{Problem 1.}
+\paragraph{Proof} 
+Since $\phi \neq \psi \Leftrightarrow (\phi > \psi) \cup (\psi > \phi)$. 
+For $\phi > \psi$, denote $X_1 = \phi - \psi$, since $X_1$ is non-negative, we can invoke the 
+claim proved in exercise 3 to get that 
+\[
+X_1 = 0 \text{ a.s.}
+\]
+Similarly, for $\psi > \phi$, denote $X_2 = \psi - \phi$, we can also get that
+\[
+X_2 = 0 \text{ a.s.}
+\]
+Therefore, we conclude that proof that 
+\[
+\int_A \phi d \mathbb{P} = \int_A \psi d \mathbb{P} \Rightarrow \phi = \psi \text{ a.s.}
+\]
+\(\blacksquare\)
+
+\section*{Problem 2.}
+\paragraph{1.} By Chebyshev inequality, we have 
+\[
+\mathbb{P}(|S_n - S| > \epsilon) \leq \frac{\mathbb{E}|S_n - S|^r}{\epsilon^r}
+\]
+Since $\frac{\mathbb{E}|S_n - S|^r}{\epsilon^r} \rightarrow 0$, we have $\mathbb{P}(|S_n - S|) \rightarrow 0$.
+This completes the proof that $S_n \xrightarrow{P} S$.
+
+\paragraph{2.} 
+Given $\bar{X}_n = \frac{1}{n} \sum_{i=1}^n X_i$ and $\mathbb{E}(X) = \mu$, we have 
+\begin{align*}
+\mathbb{E}|\frac{1}{n} \sum_{i=1}^n (X_i - \mu)|^r & = \frac{1}{n^r} \mathbb{E}|\sum_{i=1}^n (X_i - \mu)|^r \\ 
+& \leq \frac{1}{n^r} \mathbb{E}\sum_{i=1}^n |(X_i - \mu)|^r \\ 
+& \leq \mathbb{E} \bigg[\max_i |X_i - \mu| \bigg] < \infty
+\end{align*}
+It follows that $ \frac{1}{n} \sum_{i=1}^n X_i \xrightarrow{P} \mu$.
+Similarly, we have 
+\begin{align*}
+\mathbb{E}|\frac{1}{n^{1/2}} \sum_{i=1}^{n^{1/2}} (X_i - \mu)|^r & = \frac{1}{n^{r/2}} \mathbb{E}|\sum_{i=1}^{n^{1/2}} (X_i - \mu)|^r \\ 
+& \leq \frac{1}{n^{r/2}} \mathbb{E}\sum_{i=1}^{n^{1/2}} |(X_i - \mu)|^r \\ 
+& \leq \mathbb{E} \bigg[\max_i |X_i - \mu| \bigg] < \infty
+\end{align*}
+It follows that $\frac{1}{n^{1/2}} \sum_{i=1}^{n^{1/2}} X_i \xrightarrow{P} \mu$.
+Also, $\frac{1}{\ln (n)} \sum_{i=1}^{\ln (n)} X_i \xrightarrow{P} \mu$.
+
+\textbf{Remark:} We prefer $\bar{X}_n = \frac{1}{n} \sum_{i=1}^n X_i$ because 
+$\sqrt(n) (\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$ per CLT.
+
+
+\paragraph*{3.}
+\textbf{Proof}
+Because
+\[
+\operatorname{Var}(Y_i)=\mathbb E Y_i^{2}-(\mathbb EY_i)^{2}\le\mathbb E Y_i^{2}\le M,
+\]
+we have $\sigma_i^{2}:=\operatorname{Var}(Y_i)\le M$ for every $i$.
+Since $Y_i$ are independent,
+\[
+\operatorname{Var}\left(\sum_{i=1}^{n}(Y_i)\right)
+      =\sum_{i=1}^{n}\sigma_i^{2}.
+\]
+Hence
+\[
+\operatorname{Var}\!\Bigl(\frac1n\sum_{i=1}^{n}(Y_i-\mathbb EY_i)\Bigr)
+      =\frac1{n^{2}}\sum_{i=1}^{n}\sigma_i^{2}
+      \le\frac{nM}{n^{2}}
+      \rightarrow 0.
+\]
+It follows that
+\[
+\mathbb E\!\Bigl[\Bigl(\frac1n\sum_{i=1}^{n}(Y_i-\mathbb EY_i)\Bigr)^{2}\Bigr],
+\]
+by the result proved in part 1,  
+$\frac1n\sum_{i=1}^{n}(Y_i-\mathbb EY_i)\xrightarrow{\mathbb P}0$.
+\(\blacksquare\)
+
+
+\section*{Problem 3.}
+\subsection*{1.} For $X_n = \text{Bern}(\frac{1}{n})$ and $X = \text{Bern}(0)$.
+$X_n \xrightarrow{P} X$ because of strong law of large number.
+
+\subsection*{2.} For $X_n = \text{Unif}(\frac{1}{n}, \frac{2}{n}, \ldots, \frac{n-1}{n}, 1)$ and $X = \text{U}[0,1]$.
+$X_n \xrightarrow{d} X$ because of weak law of large number.
+
+
+\section*{Problem 4.}
+\subsection*{1.}
+\paragraph{Proof}
+Given the functional form of $g(X)$, the objective function is given by 
+\[
+\min_{a, b} \mathbb{E}\left[(Y - (a + b X))^2\right]
+\]
+The F.O.C with respect to $a$ and $b$ are  
+\[
+0 = - 2 \mathbb{E}\left[(Y -a - bX)\right]
+\]
+
+\[
+0 = - 2 \mathbb{E}\left[X (Y -a - bX)\right]
+\]
+Then we have $\hat{a} = \mathbb{E}[Y] - \hat{b}\mathbb{E}[X]$, and 
+\begin{align*}
+0 & = \mathbb{E}\left[X (Y - \mathbb{E}[Y] + \hat{b}\mathbb{E}[X] - \hat{b}X)\right] \\ 
+ & = \mathbb{E}\left[X (Y - \mathbb{E}[Y] + \hat{b}(\mathbb{E}[X] - X)) \right] 
+\end{align*}
+\[
+\Rightarrow
+\]
+
+\[
+\hat{b} = \frac{\mathbb{E}\left[X (Y - \mathbb{E}[Y] )\right] 
+    }{
+        \mathbb{E}\left[X(X - \mathbb{E}[X] ) \right] 
+    } = \frac{\text{Cov}(X, Y)}{\text{Var}(X)}
+\]
+\(\blacksquare\)
+
+\subsection*{2.} Suppose function $f: \{0, 1 \} \rightarrow \mathbb{R}$ is given by 
+\[
+f(x) = 
+\begin{cases}
+    \alpha \quad \text{ if } x = 0 \\
+    \beta \quad  \text{ if } x = 1
+\end{cases}
+\]
+which can be expressed as 
+\[
+\tilde{f}(x) = \alpha + (\beta - \alpha) x
+\]
+
+\subsection*{3.}
+Given $\mathbb{P}\{X = 1\} = \mathbb{P}\{X = 0\} = \frac{1}{2}$, $\mathbb{E}[Y]= 0$, and $\mathbb{E}[XY]= 1$
+we have 
+\[
+\mathbb{E}[X] = \frac{1}{2}, \quad \text{Var}(X) = \frac{1}{4}, \quad \text{Cov}(X, Y) = 1
+\]
+Therefore, $\beta^* = 4$ and $\alpha^* = -2$.
+\[
+\mathbb{E}[Y|X] = \alpha^* + \beta^* X = -2 + 4X
+\].
+
+\bibliography{../bib/notes.bib}
+
+\end{document}
