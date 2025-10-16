@@ -139,18 +139,18 @@ Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
 \begin{document}
 \maketitle
 \section*{Problem 1.}
-\paragraph{1.}
+\paragraph{1. Solution}
 The probability limit of the OLS estimator $\hat{\beta}_n$ is 
 \[
 \beta_* = \left(\mathbb{E}[XX']\right)^{-1}\mathbb{E}[XY]
 \]
 
-\paragraph{2.}
+\paragraph{2. Solution}
 If we have more parameters than observations,
 we can perfectly fit the data and achieves an $R^2=1.0$,
 which further leads to an over-fitting issue.
 
-\paragraph{3.}
+\paragraph{3. Solution}
 Given data $\{x_1, x_2, \dots, x_n \}$,
 define 
 \begin{align*}
@@ -174,7 +174,7 @@ Therefore, the conditional variance is given by
 \end{align*}
 
 \section*{Problem 2.}
-\paragraph{1.} Given the data $\{Y_i, X_i\}_{i=1}^n$, the likelihood is given by 
+\paragraph{1. Solution} Given the data $\{Y_i, X_i\}_{i=1}^n$, the likelihood is given by 
 \[
 L = \prod_{i=1} \left(
     \frac{\exp (X_i'\theta)}{1 + \exp (X_i'\theta)}
@@ -191,6 +191,66 @@ Thus,
 \[
 Q_n = \frac{1}{n} \sum_{i=1} Y_i X_i'\theta - \ln\bigg[1 + \exp (X_i'\theta)\bigg]
 \]
+
+
+\paragraph{2. Solution} 
+The score is given by 
+\[
+S(\theta) = \frac{\partial Q_n}{\partial \theta} = \sum_i Y_i X_i - \left[ 1 + \exp(X_i'\theta) \right]^{-1} X_i,
+\]
+which is a $k \times 1$ vector (assuming $\theta \in \mathbb{R}^{k}$.)
+And Hessian is given by 
+\begin{align*}
+H(\theta) & = \frac{\partial^2 \ln L}{\partial \theta \partial \theta'}  \\ 
+    & = \sum_i \frac{X_i \exp (X_i'\theta)X_i'}{(1 + \exp(X_i \theta))^2},
+\end{align*}
+which is a $k \times k$ matrix. 
+
+\paragraph{3. Solution} 
+Under correctly specified model, 
+\[
+\mathbb{E}[Y|X] = \frac{\exp(X'\theta_0)}{1 + \exp(X'\theta_0)}
+\]
+Thus, 
+\[
+Q_\infty(\theta) = \mathbb{E}\left[YX'\theta \right] - \mathbb{E}[\ln(1+ \exp(X'\theta))]
+\]
+By the Law of Iterated Expectation, we have 
+\begin{align*}
+\mathbb{E}[YX'\theta] & = \mathbb{E}[\mathbb{E}[YX'\theta|X]] \\ 
+    & = \mathbb{E}\bigg[\mathbb{E}[Y|X]X'\theta\bigg] \\ 
+    & = \mathbb{E}\bigg[\frac{\exp(X'\theta_0)}{1 + \exp(X'\theta_0)}X'\theta\bigg] 
+\end{align*}
+Therefore, 
+\[
+Q_\infty(\theta) = \mathbb{E}\bigg[\frac{\exp(X'\theta_0)}{1 + \exp(X'\theta_0)}X'\theta - \ln \bigg(1 + \exp(X'\theta) \bigg)\bigg] 
+\]
+
+
+\paragraph{4. Solution} 
+% Recall that the separation condition says 
+% \[
+% \sup_{\theta \in \Theta \cup \mathcal{N}^c} Q_\infty (\theta) < Q_\infty (\theta_*)
+% \]
+% for any neighborhood  $\mathcal{N}$ of $\theta_*$.
+Recall that the Lemma on page 28 of the lecture:
+
+\textbf{Lemma}: Suppose (i) $\theta$ is compact, (ii) $Q_\infty$ is continuous on $\theta$, 
+and (iii) Identification: $\theta_*$ is the unique maximizer of $Q_\infty$ on $\theta$,
+then the separation condition is satisfied. 
+\\
+\textbf{Proof} Since $\theta \in \mathbb{R}^k$, it is compact. 
+(ii) By a convergence-argument, we would have the continuity of $Q_\infty$.
+(iii) By the Lemma on page 34 of the lecture notes, we note that 
+If $\{f(\dot | \dot; \theta: \theta \in \Theta)\}$ is correctly specified and one-to-one parameterized,
+then $\theta_0$ is the unique solution.
+Thus, the separation condition is well-established.
+
+% Thus, we want to show 
+% \[
+% \sup_{\theta \in \Theta \cup \mathcal{N}^c} Q_\infty (\theta) < Q_\infty(\theta_*) = \mathbb{E}\bigg[\frac{\exp(X'\theta_0)}{1 + \exp(X'\theta_0)}X'\theta_* - \ln \bigg(1 + \exp(X'\theta_*) \bigg)\bigg] 
+% \]
+% for any neighborhood  $\mathcal{N}$ of $\theta_*$.
 
 
 \bibliography{../bib/notes.bib}
