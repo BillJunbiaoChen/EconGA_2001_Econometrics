@@ -235,11 +235,11 @@ Q_\infty(\theta) = \mathbb{E}\bigg[\frac{\exp(X'\theta_0)}{1 + \exp(X'\theta_0)}
 % for any neighborhood  $\mathcal{N}$ of $\theta_*$.
 Recall that the Lemma on page 28 of the lecture:
 
-\textbf{Lemma}: Suppose (i) $\theta$ is compact, (ii) $Q_\infty$ is continuous on $\theta$, 
+\noindent \textbf{Lemma}: Suppose (i) $\theta$ is compact, (ii) $Q_\infty$ is continuous on $\theta$, 
 and (iii) Identification: $\theta_*$ is the unique maximizer of $Q_\infty$ on $\theta$,
 then the separation condition is satisfied. 
-\\
-\textbf{Proof} Since $\theta \in \mathbb{R}^k$, it is compact. 
+\vspace{-3mm}
+\paragraph{Proof} Since $\theta \in \mathbb{R}^k$, it is compact. 
 (ii) By a convergence-argument, we would have the continuity of $Q_\infty$.
 (iii) By the Lemma on page 34 of the lecture notes, we note that 
 If $\{f(\dot | \dot; \theta: \theta \in \Theta)\}$ is correctly specified and one-to-one parameterized,
@@ -252,6 +252,44 @@ Thus, the separation condition is well-established.
 % \]
 % for any neighborhood  $\mathcal{N}$ of $\theta_*$.
 
+\paragraph{5. Solution}
+
+The Maximum Likelihood Estimator is given by
+\[
+\hat{\theta}_n = \arg\max_{\theta \in \Theta} Q_n(\theta).
+\]
+Therefore, we have
+\[
+Q_n(\hat{\theta}_n) \geq Q_n(\theta_0).
+\]
+It follows that
+\[
+Q_n(\theta_0) - Q_n(\hat{\theta}_n) \leq 0.
+\]
+Let $\delta_n = \sup_{\theta \in \Theta} |Q_\infty(\theta) - Q_n(\theta)|$.  
+Since $Q_n(\hat{\theta}_n) \geq Q_n(\theta_0)$,
+and $Q_n(\theta_0) \geq Q_\infty(\theta_0) - \delta_n$,
+we have
+\[
+Q_\infty(\theta_0) - \delta_n \leq Q_n(\hat{\theta}_n) \leq Q_\infty(\hat{\theta}_n) + \delta_n.
+\]
+Rearranging terms, we get:
+\[
+Q_\infty(\theta_0) - \delta_n \leq Q_\infty(\hat{\theta}_n) + \delta_n.
+\]
+
+\paragraph{6. Solution}
+Based on the Master Asymptotic Normality Theorem, 
+the asymptotic distribution of the MLE is 
+\[
+\sqrt{n}(\hat{\theta}_n - \theta_0) \xrightarrow{d} \mathcal{N}(0, V),
+\]
+where the asymptotic variance $V$ is the inverse of the Fisher Information matrix. 
+The null hypothesis is given by $H_0: \theta_{0,2} = \dots = \theta_{0,k} = 0$. 
+Under the null hypothesis, 
+we can construct a Wald statistic $W$ that follows a $\chi^2$-distribution. 
+We reject the null hypothesis if the calculated $W$ statistic 
+exceeds the critical value from the $\chi^2$ distribution.
 
 \bibliography{../bib/notes.bib}
 
