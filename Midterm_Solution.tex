@@ -298,9 +298,40 @@ Therefore, we have
 
 
 \subsection{(d) Answer}
+\noindent \textbf{Part (i) Ergodicity of $X_t$.}
+\begin{align*}
+  \lim_{n \rightarrow \infty} \mathbb{E} \bigg[\bigg(\frac{1}{n} \sum_{t=1}^{n} X_t - \frac{1}{n} \mathbb{E}(X_t) \bigg)^2 \bigg] 
+  & =  \lim_{n \rightarrow \infty}  \frac{1}{n^2} \mathbb{E} \bigg[\bigg(\sum_{t=1}^{n} X_t \bigg)^2 \bigg] \\
+  & = \lim_{n \rightarrow \infty}  \frac{1}{n^2}  \bigg(\sum_{i=1}^{n} \mathbb{E} [X_i^2] \bigg) \\
+  & =  \lim_{n \rightarrow \infty} \frac{1}{n} = 0
+\end{align*}
+\noindent Therefore, $X_t$ is ergodic. \(\blacksquare\)
+
+\vspace{5mm}
+\noindent \textbf{Part (ii) Ergodicity of $W_t$.}
+Let's derive some useful properties of $W_t$ first.
+\begin{align}
+\mathbb{E}(W_t) & = \mathbb{E}\left(\sum_{i=1}^t X_i \right) = \sum_{i=1}^t \mathbb{E}(X_i) = 0, \\
+\mathbb{E}(W_t^2) & = \mathbb{E}\left(\sum_{i=1}^t X_i^2 \right) = \sum_{i=1}^t \mathbb{E}(X^2) = t, \\
+\mathbb{E}(W_i W_j) & = \mathbb{E}\bigg[\left(\sum_{\ell=1}^i X_\ell  \right) \left(\sum_{k=1}^j X_k  \right) \bigg] = \min \{ i, j \}, \\
+\end{align}
+\noindent \textit{Remark:} To derive the third property, I use the fact that $\mathbb{E}(X_i X_j) = 0$ for $i \neq j$ 
+and $\mathbb{E}(X_i^2) = 1$.
+
+\noindent With these properties, we can compute the following.
+\begin{align*}
+  \lim_{n \rightarrow \infty} \mathbb{E} \bigg[\bigg(\frac{1}{n} \sum_{t=1}^{n} W_t - \frac{1}{n} \mathbb{E}(W_t) \bigg)^2 \bigg] 
+  & =  \lim_{n \rightarrow \infty}  \frac{1}{n^2} \mathbb{E} \bigg[\bigg(\sum_{t=1}^{n} W_t \bigg)^2 \bigg] \\
+  & = \lim_{n \rightarrow \infty}  \frac{1}{n^2}  \bigg(\sum_{i=1}^{n} \mathbb{E} [W_i^2] + 2 \sum_{j=i+1}^n \sum_{i=1}^{n-1} \mathbb{E}[W_i W_j] \bigg) \\
+  & =  \lim_{n \rightarrow \infty} \frac{1}{n^2}  \bigg(\frac{n(n+1)}{2} + \frac{n^3 - n}{3} \bigg) \\
+  & =  \lim_{n \rightarrow \infty} \frac{2n^2 + 3n + 1}{n}  > 0 \\
+\end{align*}
+\noindent Therefore, $W_t$ is not ergodic. \(\blacksquare\)
 
 \section*{Problem II.}
 \subsection{(a) Answer}
+\textbf{(i) Why I think $\mathbb{E}[X\epsilon]\neq 0$:}
+
 Consider a setting where $Y$ is savings, $X$ is participation in a retirement plan with 
 other individual covariates.
 $\mathbb{E}[X\epsilon] \neq 0$ because there might exist an unobserved factor that \textbf{jointly influences}
@@ -310,11 +341,17 @@ For example, \textbf{the frequency and amount of monetary transfers from family 
 Concretely, individuals whose children are high-income earners might 
 receive regular and more financial support from their children and thus save less and are less likely to participate in a retirement plan.
 
+\vspace{5mm}
+\noindent \textbf{(ii) The weight matrix of the optimal GMM estimator:}
 
 The weighting matrix $W^*$ of the optimal GMM estimator $\hat{\beta}^*_{\text{GMM}}$ is given by 
 \[
 W^* = \Omega^{-1}.
 \]
+
+\vspace{5mm}
+\noindent \textbf{(iii) The asymptotic variance of $\sqrt{n} \left( \hat{\beta}_{\text{GMM}} - \beta_0 \right)$:}
+
 Plugging in the generic formula of the asymptotic variance of the GMM estimator,
 the asymptotic variance is given by 
 \begin{align*}
@@ -348,6 +385,29 @@ Let $W = (Z'Z)^{-1}$, then we have
 \end{align*}
 where $P_Z = Z(Z'Z)^{-1}Z'$ is the projection matrix onto the column space of $Z$.
 
+\vspace{10mm}
+\noindent \textbf{GMM and 2SLS IV:}
+
+The following shows that $\hat{\beta}_{\text{GMM}} = \left( X'Z (Z'Z)^{-1} Z' X \right)^{-1} X'Z (Z'Z)^{-1} Z' Y$ can be derived from two-stage least squares.
+In the first stage, we regress $X$ on $Z$, and obtain the predicted value $\hat{X}$:
+\[
+\hat{X} = Z \hat{\Gamma} = Z(Z'Z)^{-1}Z'X
+\]
+In the second stage, we regress $Y$ on $\hat{X}$ and obtain the 2SLS estimator:%
+\footnote{
+Note that 
+\[
+\hat{X}' = (Z(Z'Z)^{-1}Z'X)' = X'Z(Z'Z)^{-1}Z'
+\], and
+\[
+\hat{X}' \hat{X} = X'Z(Z'Z)^{-1}Z'Z(Z'Z)^{-1}Z'X = X'Z(Z'Z)^{-1}Z'X
+\].
+}
+\begin{align*}
+\hat{\beta}_{\text{2SLS}} & = (\hat{X}'\hat{X})^{-1}\hat{X}'Y \\ 
+& = (X'Z(Z'Z)^{-1}Z'X)^{-1} X'Z(Z'Z)^{-1}Z' Y \\ 
+& = \hat{\beta}_{\text{GMM}}.
+\end{align*}
 
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
