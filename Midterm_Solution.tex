@@ -226,6 +226,78 @@ Concretely,
 \end{align*}
 Therefore, their $\sigma$-algebras are the equal, $\mathcal{F}_{1,\dots,t}^X = \mathcal{F}_{0,1,\dots,t}^W$.
 
+Consider a realization of $(W_0, W_1, \dots, W_{t-1}) = (w_0, w_1, \dots, w_{t-1})$.
+Let $W_t = w$ be an event and $(W_0, W_1, \dots, W_{t-1}) = (w_0, w_1, \dots, w_{t-1})$ be another event.
+Then, we have
+\begin{equation}
+  \label{eqn1:random_walk_independence}
+  \begin{aligned}
+  \text{Prob}(W_t = w , (w_0, \dots, w_{t-2}) |W_{t-1}) & = \text{Prob}(W_t = w | (w_0, \dots, w_{t-2}), W_{t-1}) \times \text{Prob}((w_0, \dots, w_{t-2}) | W_{t-1}) \\
+    & = \text{Prob}(W_t = w | W_{t-1}) \times \text{Prob}((w_0, w_1, \dots, w_{t-2}) | w_{t-1})
+  \end{aligned}
+\end{equation}
+where I use the chain rule of conditional proability in the first equality.
+In the second equality, I use the \textbf{Markov property} of random walks.
+
+Therefore, by the definition of independence ($A \perp B \Leftrightarrow P(AB) = P(A) P(B)$),
+we can conclude that 
+\[
+W_t \perp (W_0, W_1, \dots, W_{t-2}) | W_{t-1}
+\]
+\(\blacksquare\)
+
+
+\subsection{(c) Answer}
+\noindent \textbf{Part (i) Conditional Expectation} 
+\\
+\noindent By the definition of conditional expectation, we have
+\begin{align*}
+  \mathbb{E}(W_t | W_0, W_1, \dots, W_{t-1}) & = \sum_{w} w \times \text{Prob}(W_t = w | W_0, W_1, \dots, W_{t-1}) 
+\end{align*}
+Since random walks satify the Markov property, we have $\text{Prob}(W_t = w | W_0, \dots, W_{t-1}) = \text{Prob}(W_t = w |  W_{t-1})$.
+Hence, we have 
+\[
+  \mathbb{E}(W_t | W_0, W_1, \dots, W_{t-1}) = \sum_{w} w \times \text{Prob}(W_t = w | W_{t-1})  = \mathbb{E}(W_t | W_{t-1})
+\]
+\(\blacksquare\)
+
+\vspace{5mm}
+For $\forall \omega \in \Omega$, we have
+\[
+\mathbb{E}(W_t | W_{t-1}) = \mathbb{E}(W_{t-1} + X_t | W_{t-1}) = W_{t-1},
+\]
+which demonstrates that the simple random walk satisfies the \textbf{martingale property}.
+
+\vspace{5mm}
+\noindent \textbf{Part (ii) Conditional Variance} 
+\\
+\noindent First, I prove that $\text{Var}(W_t | W_0, W_1, \dots, W_{t-1}) = \text{Var}(W_t | W_{t-1})$.
+Following the logic in (i) above (of course, we invoke the Markov property here again), we have 
+\begin{align}
+\mathbb{E}(W_t^2 | W_0, W_1, \dots, W_{t-1}) = \mathbb{E}(W_t^2 | W_{t-1})
+\end{align}
+Therefore, we have 
+\begin{align*}
+\text{Var}(W_t | W_0, W_1, \dots, W_{t-1}) & = \mathbb{E}(W_t^2 | W_0, \dots, W_{t-1}) - \bigg[\mathbb{E}(W_t | W_0, \dots, W_{t-1})\bigg]^2 \\ 
+& = \mathbb{E}(W_t^2 | W_{t-1}) - \bigg[\mathbb{E}(W_t | W_{t-1})\bigg]^2 \\
+& = \text{Var}(W_t | W_{t-1})
+\end{align*}
+\(\blacksquare\)
+
+
+
+\noindent Second, I compute the condition variance. For $\forall \omega \in \Omega$, we have
+\begin{align*}
+\text{Var}(W_t | W_{t-1}) & = \text{Var}(W_{t-1} + X_t | W_{t-1}) \\ 
+& = \text{Var}(X_t | W_{t-1}) \\
+& = \mathbb{E}(X_t^2 | W_{t-1}) - (\mathbb{E}(X_t | W_{t-1}))^2 \\  
+& = \mathbb{E}(X_t^2 | W_{t-1}) \\ 
+& = \mathbb{E}(X_t^2) \\ 
+& = 1.
+\end{align*}
+
+
+\subsection{(d) Answer}
 
 \section*{Problem II.}
 \subsection{(a) Answer}
