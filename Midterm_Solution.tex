@@ -357,8 +357,12 @@ the asymptotic variance is given by
 \begin{align*}
     (G'WG)^{-1}G'W\Omega W G(G'WG)^{-1} 
     & = (G'\Omega^{-1}G)^{-1}G'\Omega^{-1}\Omega \Omega^{-1} G(G'\Omega^{-1}G)^{-1} \\
-    & = (G'\Omega^{-1}G)^{-1}.
+    & = (G'\Omega^{-1}G)^{-1} \\
+    & = \bigg[G'\bigg(\sigma_0^2(Z) \mathbb{E}(ZZ') \bigg)^{-1}G\bigg]^{-1} \\ 
+    & = \sigma_0^2(Z) \bigg[G'\mathbb{E}(ZZ')^{-1}G\bigg]^{-1}
 \end{align*}
+where $\Omega := \mathbb{E}[ZZ'\epsilon^2] = \mathbb{E}[ZZ'\mathbb{E}[\epsilon^2|Z]] = \sigma_0^2(Z)  \mathbb{E}(ZZ')$ is given by the assumption. $G = \mathbb{E}[ZX']$.
+
 
 
 \subsection{(b) Answer}
@@ -410,9 +414,16 @@ and
 & = \hat{\beta}_{\text{GMM}}^*.
 \end{align*}
 
-\noindent \textbf{Remark:} Since the weighting matrix in the 2SLS is $(Z'Z)^{-1}$, rather than the optimal weighting matrix $\Omega^{-1}$,
-the optimal GMM estimator has a smaller asymptotic variance than the 2SLS estimator.
-Therefore, the standard errors computed from 2SLS are not correct for the optimal GMM estimator.
+\noindent \textbf{The S.E. of the Optimal GMM and 2SLS:} 
+Note that the weighting matrix in the 2SLS is $(\bm{Z}'\bm{Z})^{-1}$ (or equivalently, $n^{-1}(\bm{Z}'\bm{Z})^{-1}$), 
+which asymptotically approaches to $(\mathbb{E}[ZZ'])^{-1}$. 
+Namely, $n^{-1}(\bm{Z}'\bm{Z})^{-1} \rightarrow (\mathbb{E}[ZZ'])^{-1}$.
+Meanwhile, the optimal weighting matrix is given by $\Omega^{-1} = \bigg[\mathbb{E}[ZZ' \mathbb{E}[\epsilon^2|Z] ] \bigg]^{-1}$.
+Therefore, we can conclude that 
+\begin{itemize}
+  \item If we assume conditional \textbf{homoskedasticity} ($\mathbb{E}[\epsilon^2|Z] = \sigma^2 $), then the 2SLS can produce correct SE for $\hat{\beta}_{\text{GMM}}^*$.
+  \item However, if the error are conditionally \textbf{heteroskedastic}, then the 2SLS is less efficient than the GMM. Hence, the SE from 2SLS is incorrect for $\hat{\beta}_{\text{GMM}}^*$.
+\end{itemize}
 
 
 \subsection{(d) Answer}
@@ -464,6 +475,54 @@ Therefore, we have
 \end{align*}
 \(\blacksquare\)
 
+
+\subsection{(e) Answer}
+From part (d) above, we have
+
+\begin{align*}
+\mathbb{E}\bigg[\sqrt{n} \left(\hat{\beta}_{\text{OLS}} - \beta_0\right) \bigg] & = \sqrt{n}\mathbb{E}\bigg[\left(X' P_Z X \right)^{-1} X' P_Z Y \bigg] - \sqrt{n}\beta_0 \\
+& = \sqrt{n}\mathbb{E}\bigg[\left(X' P_Z X \right)^{-1} X' P_Z (X\beta_0 + \epsilon) \bigg] - \sqrt{n}\beta_0 \\ 
+& = \sqrt{n} \mathbb{E} [\beta_0] + \sqrt{n} \mathbb{E} [\left(X' P_Z X \right)^{-1} X' Z (Z'Z)^{-1} Z'\epsilon] - \sqrt{n}\beta_0 \\ 
+& = 0
+\end{align*}
+
+Futhermore, we can simplify $\hat{\beta}_{\text{OLS}} - \beta_0$ as follows.
+\begin{align*}
+\hat{\beta}_{\text{OLS}} - \beta_0 & = \left(X' P_Z X \right)^{-1} X' P_Z (X\beta_0 + V\lambda_0 + \eta) - \beta_0 \\
+& = \beta_0 + \left(X' P_Z X \right)^{-1} X' P_Z V\lambda_0 + \left(X' P_Z X \right)^{-1} X' P_Z \eta - \beta_0  \\
+& = \beta_0 + 0 + \left(X' P_Z X \right)^{-1} X' P_Z \eta - \beta_0 \\ 
+& = \left(X' P_Z X \right)^{-1} X' P_Z \eta,
+\end{align*}
+where the third equlity uses the orthogonality condition between $P_Z X$ and $V$.
+
+To derive the asymptotic variance, let's first compute some useful statistics.
+\begin{align*}
+  \mathbb{E}[\eta | Z] & = \mathbb{E}\bigg[\epsilon - \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\ 
+  & = \mathbb{E}[ \epsilon | Z] - \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\
+  & = \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] - \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\
+  & = 0,
+\end{align*}
+where the third equality applies the Law of Iterated Expectation.
+
+\begin{align*}
+  \text{Var}(\eta) & = \mathbb{E}\bigg[\text{Var}(\eta | Z) \bigg] + \text{Var} \bigg(  \mathbb{E}[\eta | Z] \bigg) \\
+    & = \mathbb{E}\bigg[ \mathbb{E}(\eta^2 | Z) - (\mathbb{E}(\eta | Z))^2 \bigg] + \text{Var} \bigg(  \mathbb{E}[\eta | Z] \bigg) \\
+    & = \mathbb{E}[\sigma^2_\eta - 0] + 0 \\
+    & = \sigma^2_\eta,
+\end{align*}
+where the first equality is due to the Law of Total Variance.
+The third equality uses the assumption that $\mathbb{E}(\eta^2 | Z) = \sigma^2_\eta$.
+
+Therefore, we have%
+\footnote{
+I use the fact that $P_Z$ is idempotent and $\text{Var}(\eta) = \sigma^2_\eta$ in the third equality.
+}
+\begin{align*}
+\text{Var}[\sqrt{n} (\hat{\beta}_{\text{OLS}} - \beta_0)] & = n \text{Var}[(X' P_Z X)^{-1}X' P_Z \eta] \\ 
+& = n (X' P_Z X)^{-1}X' P_Z \text{Var}(\eta) P_Z X (X' P_Z X)^{-1} \\ 
+& = n \sigma^2_\eta (X' P_Z X)^{-1}X' P_Z X (X' P_Z X)^{-1} \\ 
+& = n \sigma^2_\eta (X' P_Z X)^{-1}
+\end{align*}
 
 
 %% =========== %% ========= %%
