@@ -369,25 +369,29 @@ Plugging them into the equation above, we have the asymptotic variance given by
 \end{align}
 
 \subsection{(b) Answer}
+Since we assume conditional homoskedasticity, $\mathbb{E}[\epsilon^2|Z] = \sigma_0^2$.
 I propose consistent estimators of $W^*$ and $\Sigma^*$ as follows.
 \begin{align}
-  \hat{W}^* & = \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' \right)^{-1} 
+  \hat{W} & = \hat{\sigma}^2 \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' \right)^{-1} = \hat{\sigma}^2 (\bm{Z}'\bm{Z}/n)^{-1},
 \end{align}
+where $Z_i$ is $p\times 1$ vector (observation), and $\bm{Z} = (Z_1, Z_2, \dots, Z_n)'$ is $n \times p$ matrix.
+$\hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^{n} (Y_i - X_i' \hat{\beta})^2$.
 
-With $\hat{W}^*$, we can construct the consistent estimator of the asymptotic variance as
+With $\hat{W}$, we can construct the consistent estimator of the asymptotic variance as
 \begin{align}
-  \hat{\Sigma}^* & = \bigg[\hat{G}'\hat{W}^* \hat{G}\bigg]^{-1}
+  \hat{\Sigma} & = \bigg[\hat{G}'\hat{W} \hat{G}\bigg]^{-1}
 \end{align}
 where $\hat{G} = \frac{1}{n} \sum_{i=1}^n Z_i X_i'$.
 
 \noindent \textbf{Justifications for my proposals:}
 \begin{itemize}
   \item Under the assumption of conditional homoskedasticity, the generic form of 
-  \[\hat{W}^* = 
+  \begin{align*}
+    \hat{W} & = \frac{1}{n} \sum_{i=1}^{n}
   \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta})^2 \right)^{-1}
-  \] becomes 
+  \end{align*} becomes 
   $\left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i'\right)^{-1}$ because weighting matrix does not depend on scaling.
-  \item In fact, the propose $\hat{W}^*$ above is the same as the one used in 2SLS estimator, which is efficient
+  \item In fact, the propose $\hat{W}$ above is the same as the one used in 2SLS estimator, which is efficient
   with conditional homoskedasticity,
 \end{itemize}
 
@@ -566,9 +570,9 @@ $\sigma_\eta^2(Z) = \sigma_\eta^2$ are functions of $Z$ and thus they do not hol
 Therefore, I propose the following heteroskedasticity-robust estimator for the asymptotic variance of 
 $\sqrt{n}(\hat{\beta}_{\text{GMM}} - \beta_0)$:
 \begin{align}
-  \hat{\Sigma}^* & = \bigg[\hat{G}'\hat{W}^* \hat{G}\bigg]^{-1}, 
+  \widehat{\Sigma} & = \bigg[\hat{G}'\widehat{W} \hat{G}\bigg]^{-1}, 
 \end{align}
-where $\hat{W}^* = \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 \right)^{-1}$.
+where $\widehat{W} = \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 \right)^{-1}$.
 $\hat{\beta}_{\text{2SLS}} = \left( X'P_Z X \right)^{-1} X'P_Z Y$.
 $\hat{G} = \frac{1}{n} \sum_{i=1}^n Z_i X_i'$.
 
@@ -581,10 +585,10 @@ $\hat{G} = \frac{1}{n} \sum_{i=1}^n Z_i X_i'$.
   \]
   \item Second, since $\mathbb{E}[Y_i - X_i' \hat{\beta}_{\text{2SLS}}] = \epsilon_i$, we have
   \[
-    \left(\hat{W}^*\right)^{-1} = \frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 
+    \left(\widehat{W}\right)^{-1} = \frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 
     \rightarrow_p \mathbb{E}[Z Z' \epsilon^2] = \Omega.
   \]
-  \item Finally, since $\hat{G} \rightarrow_p \mathbb{E}[ZX']$, we can conclude that $\hat{\Sigma}^*$ is consistent.
+  \item Finally, since $\hat{G} \rightarrow_p \mathbb{E}[ZX']$, we can conclude that $\widehat{\Sigma}$ is consistent.
 \end{itemize}
 
 
