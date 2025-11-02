@@ -328,7 +328,7 @@ and $\mathbb{E}(X_i^2) = 1$.
 \end{align*}
 \noindent Therefore, $W_t$ is not ergodic. \(\blacksquare\)
 
-\section*{Problem II.}
+\section{Problem II.}
 \subsection{(a) Answer}
 \textbf{(i) Why I think $\mathbb{E}[X\epsilon]\neq 0$:}
 
@@ -371,9 +371,8 @@ Plugging them into the equation above, we have the asymptotic variance given by
 \subsection{(b) Answer}
 I propose consistent estimators of $W^*$ and $\Sigma^*$ as follows.
 \begin{align}
-  \hat{W}^* & = \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 \right)^{-1}
+  \hat{W}^* & = \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' \right)^{-1} 
 \end{align}
-where $\hat{\beta}_{\text{2SLS}} = \left( X'P_Z X \right)^{-1} X'P_Z Y$.
 
 With $\hat{W}^*$, we can construct the consistent estimator of the asymptotic variance as
 \begin{align}
@@ -383,37 +382,34 @@ where $\hat{G} = \frac{1}{n} \sum_{i=1}^n Z_i X_i'$.
 
 \noindent \textbf{Justifications for my proposals:}
 \begin{itemize}
-  \item First, the 2SLS estimator is efficient because $\mathbb{E}[Z\epsilon] = 0$. Namely,
-  \[
-  \mathbb{E}\bigg[\hat{\beta}_{\text{2SLS}}\bigg] = 
-  \mathbb{E}\bigg[\left( X'P_Z X \right)^{-1} X'P_Z (X\beta_0 + \epsilon) \bigg] = \beta_0.
-  \]
-  \item Second, since $\mathbb{E}[Y_i - X_i' \hat{\beta}_{\text{2SLS}}] = \epsilon_i$, we have
-  \[
-    \left(\hat{W}^*\right)^{-1} = \frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 
-    \rightarrow_p \mathbb{E}[Z Z' \epsilon^2] = \Omega.
-  \]
-  \item Finally, since $\hat{G} \rightarrow_p \mathbb{E}[ZX']$, we can conclude that $\hat{\Sigma}^*$ is consistent.
+  \item Under the assumption of conditional homoskedasticity, the generic form of 
+  \[\hat{W}^* = 
+  \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta})^2 \right)^{-1}
+  \] becomes 
+  $\left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i'\right)^{-1}$ because weighting matrix does not depend on scaling.
+  \item In fact, the propose $\hat{W}^*$ above is the same as the one used in 2SLS estimator, which is efficient
+  with conditional homoskedasticity,
 \end{itemize}
+
 \subsection{(c) Answer}
 Given the orthogonality condition $\mathbb{E}[Z\epsilon] = 0$, we can formulate the sample moment condition as
 \[
 \hat{g}(\beta) = \frac{1}{n} \sum_i g_i(\beta) = \frac{1}{n} \sum_i Z_i (Y_i - X_i'\beta).
 \]
-The first order condition for the minimization of $\hat{g}(\beta)' W \hat{g}(\beta)$ is given by
+The first order condition for the minimization of $\hat{g}(\beta)' W \hat{g}(\beta)$ is given by (in data matrix form)
 \[
-0 = X'Z W Z'(y - X\beta) = X'Z W Z' y - X'Z W Z' X \beta.
+0 = X'Z W Z'(Y - X\beta) = X'Z W Z' Y - X'Z W Z' X \beta.
 \]
 It follows that 
 \[
-\hat{\beta} = \left( X'Z W Z' X \right)^{-1} X'Z W Z' y.
+\hat{\beta} = \left( X'Z W Z' X \right)^{-1} X'Z W Z' Y.
 \]
 Let $W = (Z'Z)^{-1}$, then we have
 \begin{align*}
-\hat{\beta} & = \left( X'Z (Z'Z)^{-1} Z' X \right)^{-1} X'Z (Z'Z)^{-1} Z' y \\ 
-    & = \left( X' P_Z X \right)^{-1} X' P_Z y,
+\hat{\beta} & = \left( X'Z (Z'Z)^{-1} Z' X \right)^{-1} X'Z (Z'Z)^{-1} Z' Y \\ 
+    & = \left( X' P_Z X \right)^{-1} X' P_Z Y,
 \end{align*}
-where $P_Z = Z(Z'Z)^{-1}Z'$ is the projection matrix onto the column space of $Z$.
+where $P_Z = Z(Z'Z)^{-1}Z'$ is the projection matrix.
 
 \vspace{10mm}
 \noindent \textbf{GMM and 2SLS IV:}
@@ -503,52 +499,93 @@ Therefore, we have
 
 
 \subsection{(e) Answer}
-From part (d) above, we have
-
+From part (d) above, we can simplify $\hat{\beta}_{\text{OLS}} - \beta_0$ as follows.
 \begin{align*}
-\mathbb{E}\bigg[\sqrt{n} \left(\hat{\beta}_{\text{OLS}} - \beta_0\right) \bigg] & = \sqrt{n}\mathbb{E}\bigg[\left(X' P_Z X \right)^{-1} X' P_Z Y \bigg] - \sqrt{n}\beta_0 \\
-& = \sqrt{n}\mathbb{E}\bigg[\left(X' P_Z X \right)^{-1} X' P_Z (X\beta_0 + \epsilon) \bigg] - \sqrt{n}\beta_0 \\ 
-& = \sqrt{n} \mathbb{E} [\beta_0] + \sqrt{n} \mathbb{E} [\left(X' P_Z X \right)^{-1} X' Z (Z'Z)^{-1} Z'\epsilon] - \sqrt{n}\beta_0 \\ 
-& = 0
-\end{align*}
-
-Futhermore, we can simplify $\hat{\beta}_{\text{OLS}} - \beta_0$ as follows.
-\begin{align*}
-\hat{\beta}_{\text{OLS}} - \beta_0 & = \left(X' P_Z X \right)^{-1} X' P_Z (X\beta_0 + V\lambda_0 + \eta) - \beta_0 \\
-& = \beta_0 + \left(X' P_Z X \right)^{-1} X' P_Z V\lambda_0 + \left(X' P_Z X \right)^{-1} X' P_Z \eta - \beta_0  \\
-& = \beta_0 + 0 + \left(X' P_Z X \right)^{-1} X' P_Z \eta - \beta_0 \\ 
-& = \left(X' P_Z X \right)^{-1} X' P_Z \eta,
+\hat{\beta}_{\text{OLS}} - \beta_0 & = \left(\bm{X'P_Z X} \right)^{-1} \bm{X' P_Z} (\bm{X}\beta_0 + \bm{V}\lambda_0 + \eta) - \beta_0 \\
+& = \beta_0 + \left(\bm{X'P_Z X} \right)^{-1} \bm{X' P_Z V}\lambda_0 + \left(\bm{X'P_Z X} \right)^{-1} \bm{X' P_Z} \eta - \beta_0  \\
+& = \beta_0 + 0 + \left(\bm{X'P_Z X} \right)^{-1} \bm{X' P_Z} \eta - \beta_0 \\ 
+& = \left(\bm{X'P_Z X} \right)^{-1} \bm{X' P_Z} \eta,
 \end{align*}
 where the third equlity uses the orthogonality condition between $P_Z X$ and $V$.
 
-To derive the asymptotic variance, let's first compute some useful statistics.
+It follows that 
 \begin{align*}
-  \mathbb{E}[\eta | Z] & = \mathbb{E}\bigg[\epsilon - \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\ 
-  & = \mathbb{E}[ \epsilon | Z] - \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\
-  & = \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] - \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\
-  & = 0,
+\sqrt{n} \left(\hat{\beta}_{\text{OLS}} - \beta_0 \right) & = 
+ (n^{-1} \bm{X'P_Z X} )^{-1} \bigg(n^{-1/2}  \bm{X' P_Z} \eta\bigg)
 \end{align*}
-where the third equality applies the Law of Iterated Expectation.
 
-\begin{align*}
-  \text{Var}(\eta) & = \mathbb{E}\bigg[\text{Var}(\eta | Z) \bigg] + \text{Var} \bigg(  \mathbb{E}[\eta | Z] \bigg) \\
-    & = \mathbb{E}\bigg[ \mathbb{E}(\eta^2 | Z) - (\mathbb{E}(\eta | Z))^2 \bigg] + \text{Var} \bigg(  \mathbb{E}[\eta | Z] \bigg) \\
-    & = \mathbb{E}[\sigma^2_\eta - 0] + 0 \\
-    & = \sigma^2_\eta,
-\end{align*}
-where the first equality is due to the Law of Total Variance.
-The third equality uses the assumption that $\mathbb{E}(\eta^2 | Z) = \sigma^2_\eta$.
+By the LLN, we have 
+\[
+n^{-1} \bm{X'P_Z X} = n^{-1} \bm{X}' \bm{Z(Z'Z)^{-1}Z' X} \rightarrow_p 
+\mathbb{E} \left[ XZ' \right] \mathbb{E} \left[ ZZ' \right]^{-1} \mathbb{E} \left[ ZX' \right]
+\]
 
-Therefore, we have%
-\footnote{
-I use the fact that $P_Z$ is idempotent and $\text{Var}(\eta) = \sigma^2_\eta$ in the third equality.
-}
-\begin{align*}
-\text{Var}[\sqrt{n} (\hat{\beta}_{\text{OLS}} - \beta_0)] & = n \text{Var}[(X' P_Z X)^{-1}X' P_Z \eta] \\ 
-& = n (X' P_Z X)^{-1}X' P_Z \text{Var}(\eta) P_Z X (X' P_Z X)^{-1} \\ 
-& = n \sigma^2_\eta (X' P_Z X)^{-1}X' P_Z X (X' P_Z X)^{-1} \\ 
-& = n \sigma^2_\eta (X' P_Z X)^{-1}
-\end{align*}
+By CLT, we have 
+\[
+n^{-1/2}  \bm{X' P_Z} \eta \rightarrow_d \mathcal{N}(0, \sigma_\eta^2 \mathbb{E} \left[ XZ' \right] \mathbb{E} \left[ ZZ' \right]^{-1} \mathbb{E} \left[ ZX' \right])
+\]
+
+Finally, by Slusky theorem, we have 
+\[
+(n^{-1} \bm{X'P_Z X} )^{-1} \bigg(n^{-1/2}  \bm{X' P_Z} \eta\bigg) \rightarrow_d
+\mathcal{N}\bigg\{0, \sigma_\eta^2 \bigg(\mathbb{E} \left[ XZ' \right] \mathbb{E} \left[ ZZ' \right]^{-1} \mathbb{E} \left[ ZX' \right]\bigg)^{-1} \bigg\}.
+\]
+% To derive the asymptotic variance, let's first compute some useful statistics.
+% \begin{align*}
+%   \mathbb{E}[\eta | Z] & = \mathbb{E}\bigg[\epsilon - \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\ 
+%   & = \mathbb{E}[ \epsilon | Z] - \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\
+%   & = \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] - \mathbb{E}\bigg[ \mathbb{E}[\epsilon | X, Z] | Z \bigg] \\
+%   & = 0,
+% \end{align*}
+% where the third equality applies the Law of Iterated Expectation.
+
+% \begin{align*}
+%   \text{Var}(\eta) & = \mathbb{E}\bigg[\text{Var}(\eta | Z) \bigg] + \text{Var} \bigg(  \mathbb{E}[\eta | Z] \bigg) \\
+%     & = \mathbb{E}\bigg[ \mathbb{E}(\eta^2 | Z) - (\mathbb{E}(\eta | Z))^2 \bigg] + \text{Var} \bigg(  \mathbb{E}[\eta | Z] \bigg) \\
+%     & = \mathbb{E}[\sigma^2_\eta - 0] + 0 \\
+%     & = \sigma^2_\eta,
+% \end{align*}
+% where the first equality is due to the Law of Total Variance.
+% The third equality uses the assumption that $\mathbb{E}(\eta^2 | Z) = \sigma^2_\eta$.
+
+% Therefore, we have%
+% \footnote{
+% I use the fact that $P_Z$ is idempotent and $\text{Var}(\eta) = \sigma^2_\eta$ in the third equality.
+% }
+% \begin{align*}
+% \text{Var}[\sqrt{n} (\hat{\beta}_{\text{OLS}} - \beta_0)] & = n \text{Var}[(X' P_Z X)^{-1}X' P_Z \eta] \\ 
+% & = n (X' P_Z X)^{-1}X' P_Z \text{Var}(\eta) P_Z X (X' P_Z X)^{-1} \\ 
+% & = n \sigma^2_\eta (X' P_Z X)^{-1}X' P_Z X (X' P_Z X)^{-1} \\ 
+% & = n \sigma^2_\eta (X' P_Z X)^{-1}
+% \end{align*}
+
+\subsection{(f) Answer}
+\noindent Due to conditional heteroskedasticity, $\sigma_0^2(Z) = \sigma_0^2$ and 
+$\sigma_\eta^2(Z) = \sigma_\eta^2$ are functions of $Z$ and thus they do not hold in general.
+
+Therefore, I propose the following heteroskedasticity-robust estimator for the asymptotic variance of 
+$\sqrt{n}(\hat{\beta}_{\text{GMM}} - \beta_0)$:
+\begin{align}
+  \hat{\Sigma}^* & = \bigg[\hat{G}'\hat{W}^* \hat{G}\bigg]^{-1}, 
+\end{align}
+where $\hat{W}^* = \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 \right)^{-1}$.
+$\hat{\beta}_{\text{2SLS}} = \left( X'P_Z X \right)^{-1} X'P_Z Y$.
+$\hat{G} = \frac{1}{n} \sum_{i=1}^n Z_i X_i'$.
+
+\noindent \textbf{Justifications for my proposals:}
+\begin{itemize}
+  \item First, the 2SLS estimator is efficient because $\mathbb{E}[Z\epsilon] = 0$. Namely,
+  \[
+  \mathbb{E}\bigg[\hat{\beta}_{\text{2SLS}}\bigg] = 
+  \mathbb{E}\bigg[\left( X'P_Z X \right)^{-1} X'P_Z (X\beta_0 + \epsilon) \bigg] = \beta_0.
+  \]
+  \item Second, since $\mathbb{E}[Y_i - X_i' \hat{\beta}_{\text{2SLS}}] = \epsilon_i$, we have
+  \[
+    \left(\hat{W}^*\right)^{-1} = \frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 
+    \rightarrow_p \mathbb{E}[Z Z' \epsilon^2] = \Omega.
+  \]
+  \item Finally, since $\hat{G} \rightarrow_p \mathbb{E}[ZX']$, we can conclude that $\hat{\Sigma}^*$ is consistent.
+\end{itemize}
 
 
 %% =========== %% ========= %%
