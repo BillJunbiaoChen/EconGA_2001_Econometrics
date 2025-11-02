@@ -346,8 +346,9 @@ receive regular and more financial support from their children and thus save les
 
 The weighting matrix $W^*$ of the optimal GMM estimator $\hat{\beta}^*_{\text{GMM}}$ is given by 
 \[
-W^* = \Omega^{-1}.
+W^* = \Omega^{-1},
 \]
+where $\Omega := \mathbb{E}[ZZ'\epsilon^2]$.
 
 \vspace{5mm}
 \noindent \textbf{(iii) The asymptotic variance of $\sqrt{n} \left( \hat{\beta}_{\text{GMM}} - \beta_0 \right)$:}
@@ -357,18 +358,43 @@ the asymptotic variance is given by
 \begin{align*}
     (G'WG)^{-1}G'W\Omega W G(G'WG)^{-1} 
     & = (G'\Omega^{-1}G)^{-1}G'\Omega^{-1}\Omega \Omega^{-1} G(G'\Omega^{-1}G)^{-1} \\
-    & = (G'\Omega^{-1}G)^{-1} \\
-    & = \bigg[G'\bigg(\sigma_0^2(Z) \mathbb{E}(ZZ') \bigg)^{-1}G\bigg]^{-1} \\ 
-    & = \sigma_0^2(Z) \bigg[G'\mathbb{E}(ZZ')^{-1}G\bigg]^{-1}
+    & = (G'\Omega^{-1}G)^{-1}
 \end{align*}
-where $\Omega := \mathbb{E}[ZZ'\epsilon^2] = \mathbb{E}[ZZ'\mathbb{E}[\epsilon^2|Z]] = \sigma_0^2(Z)  \mathbb{E}(ZZ')$ is given by the assumption. $G = \mathbb{E}[ZX']$.
-
-
+Since $\Omega := \mathbb{E}[ZZ'\epsilon^2] = \mathbb{E}[ZZ'\mathbb{E}[\epsilon^2|Z]] = \sigma_0^2(Z) \mathbb{E}(ZZ')$ by the assumption. 
+$G = \mathbb{E}[ZX']$.
+Plugging them into the equation above, we have the asymptotic variance given by 
+\begin{align}
+    (G'WG)^{-1}G'W\Omega W G(G'WG)^{-1} 
+    & = \sigma_0^2(Z) \bigg[\mathbb{E}[XZ'] \mathbb{E}(ZZ')^{-1} \mathbb{E}[ZX']\bigg]^{-1}
+\end{align}
 
 \subsection{(b) Answer}
-Consistent estimators of $W^*$ and $\Sigma^*$ is given by 
+I propose consistent estimators of $W^*$ and $\Sigma^*$ as follows.
+\begin{align}
+  \hat{W}^* & = \left(\frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 \right)^{-1}
+\end{align}
+where $\hat{\beta}_{\text{2SLS}} = \left( X'P_Z X \right)^{-1} X'P_Z Y$.
 
+With $\hat{W}^*$, we can construct the consistent estimator of the asymptotic variance as
+\begin{align}
+  \hat{\Sigma}^* & = \bigg[\hat{G}'\hat{W}^* \hat{G}\bigg]^{-1}
+\end{align}
+where $\hat{G} = \frac{1}{n} \sum_{i=1}^n Z_i X_i'$.
 
+\noindent \textbf{Justifications for my proposals:}
+\begin{itemize}
+  \item First, the 2SLS estimator is efficient because $\mathbb{E}[Z\epsilon] = 0$. Namely,
+  \[
+  \mathbb{E}\bigg[\hat{\beta}_{\text{2SLS}}\bigg] = 
+  \mathbb{E}\bigg[\left( X'P_Z X \right)^{-1} X'P_Z (X\beta_0 + \epsilon) \bigg] = \beta_0.
+  \]
+  \item Second, since $\mathbb{E}[Y_i - X_i' \hat{\beta}_{\text{2SLS}}] = \epsilon_i$, we have
+  \[
+    \left(\hat{W}^*\right)^{-1} = \frac{1}{n} \sum_{i=1}^{n} Z_i Z_i' (Y_i - X_i' \hat{\beta}_{\text{2SLS}})^2 
+    \rightarrow_p \mathbb{E}[Z Z' \epsilon^2] = \Omega.
+  \]
+  \item Finally, since $\hat{G} \rightarrow_p \mathbb{E}[ZX']$, we can conclude that $\hat{\Sigma}^*$ is consistent.
+\end{itemize}
 \subsection{(c) Answer}
 Given the orthogonality condition $\mathbb{E}[Z\epsilon] = 0$, we can formulate the sample moment condition as
 \[
