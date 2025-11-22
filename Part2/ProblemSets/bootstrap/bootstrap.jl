@@ -1,6 +1,6 @@
 using LinearAlgebra, Random, Distributions, Plots
 
-cd("/Users/junbiao/Dropbox/PhD_firstyear/Metrics_IPart2/ProblemSets/bootstrap")
+cd("/Users/junbiao/Dropbox/PhD_firstyear/Metrics_I/EconGA_2001_Econometrics/Part2/ProblemSets/bootstrap")
 
 # helper functions 
 function ls_estimator(Y, X)
@@ -54,7 +54,7 @@ for n in [10, 50, 200]
 
     # visualization 
     plot(
-        histogram(β̂1_bs, bins=10, label="LS (Residual Bootstrap)", color=:blue, alpha=0.5, linecolor=:transparent),
+        histogram(β̂1_bs, xlims=(1.5, 2.5), bins=10, label="LS (Residual Bootstrap)", color=:blue, alpha=0.5, linecolor=:transparent),
         histogram(t_stat_bs, bins=10, label="t-stat", color=:blue, alpha=0.5, linecolor=:transparent);
         layout=(1, 2),  # Arrange plots in a 1x2 grid
         size=(680, 300)  # Set the overall figure size
@@ -89,7 +89,7 @@ for n in [10, 50, 200]
 
     # visualization 
     plot(
-        histogram(β̂1_bs, bins=10, label="LS (cond-dist based)", color=:blue, alpha=0.5, linecolor=:transparent),
+        histogram(β̂1_bs, bins=10, xlims=(0, 2), label="LS (cond-dist based)", color=:blue, alpha=0.5, linecolor=:transparent),
         histogram(t_stat_bs, bins=10, label="t-stat", color=:blue, alpha=0.5, linecolor=:transparent);
         layout=(1, 2),  # Arrange plots in a 1x2 grid
         size=(680, 300)  # Set the overall figure size
