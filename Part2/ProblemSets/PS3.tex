@@ -154,7 +154,7 @@ It follows that
     \label{eqn:FOC}
     -X'y + X'X\hat{\beta}_{CLS} +  R' \hat{\lambda}_{CLS} = 0
 \end{align}
-Pre-multiplying both sides by $R(X'X)^{-1}$ (because I want to use the linear restriction to simplify terms)),
+Pre-multiplying both sides by $R(X'X)^{-1}$ (because I want to use the linear restriction to simplify terms),
 then we have:
 \begin{align*}
     & -R(X'X)^{-1}X'y + R(X'X)^{-1}X'X\hat{\beta}_{CLS} + R(X'X)^{-1}R' \hat{\lambda}_{CLS} = 0 \\ 
@@ -177,6 +177,27 @@ then we have
 \hat{e}_R = \hat{e}_u +  X(X'X)^{-1} R' \left[R(X'X)^{-1}R' \right]^{-1}\hat{d}
 \]
 \(\blacksquare\)
+
+\subsection*{(b) Answer} 
+Following (a), we have 
+\begin{align*}
+    \hat{e}_R' \hat{e}_R & = \left[\hat{e}_u +  X(X'X)^{-1} R' \left[R(X'X)^{-1}R' \right]^{-1}\hat{d} \right]'
+    \left[\hat{e}_u +  X(X'X)^{-1} R' \left[R(X'X)^{-1}R' \right]^{-1}\hat{d} \right] \\ 
+    & = \hat{e}_u'\hat{e}_u + \hat{d}'\left[R(X'X)^{-1}R' \right]^{-1} R(X'X)^{-1} X'  X(X'X)^{-1} R' \left[R(X'X)^{-1}R' \right]^{-1}\hat{d}  \\ 
+    & = \hat{e}_u'\hat{e}_u + \hat{d}'\left[R(X'X)^{-1}R' \right]^{-1} \hat{d}  \\ 
+\end{align*}
+
+\subsection*{(c) Answer} 
+Given the results in (b), we can express the Wald, the LM, and the LR statistics as follows.
+
+\noindent \textbf{The Wald statistic:}
+\begin{align*}
+    W_n & = n (R \hat{\beta}_{LS} - r)' \hat{V}_r^{-1} (R \hat{\beta}_{LS} - r) \\ 
+      & = n (R \hat{\beta}_{LS} - r)' \left(R \hat{V}_\beta R'\right)^{-1} (R \hat{\beta}_{LS} - r) \\ 
+    & = n \hat{d}'\bigg[R \frac{n }{n - k} \hat{e}_u'\hat{e}_u (X'X)^{-1}R' \bigg]^{-1} \hat{d} \\
+    & = (n - k) \hat{e}_u'\hat{e}_u  \hat{d}' \bigg[R (X'X)^{-1}R' \bigg]^{-1} \hat{d}
+\end{align*}
+
 
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
