@@ -27,6 +27,8 @@ Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
 %\usepackage{enumitem}
 \usepackage{physics}
 \usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
 \usepackage{listings}
 \usepackage{upquote}
 \usepackage{booktabs} %Package with \toprule and \bottomrule
@@ -195,9 +197,66 @@ Given the results in (b), we can express the Wald, the LM, and the LR statistics
     W_n & = n (R \hat{\beta}_{LS} - r)' \hat{V}_r^{-1} (R \hat{\beta}_{LS} - r) \\ 
       & = n (R \hat{\beta}_{LS} - r)' \left(R \hat{V}_\beta R'\right)^{-1} (R \hat{\beta}_{LS} - r) \\ 
     & = n \hat{d}'\bigg[R \frac{n }{n - k} \hat{e}_u'\hat{e}_u (X'X)^{-1}R' \bigg]^{-1} \hat{d} \\
-    & = (n - k) \hat{e}_u'\hat{e}_u  \hat{d}' \bigg[R (X'X)^{-1}R' \bigg]^{-1} \hat{d}
+    & = (n - k) \left(\hat{e}_u'\hat{e}_u \right)^{-1}  \hat{d}' \bigg[R (X'X)^{-1}R' \bigg]^{-1} \hat{d}
+\end{align*}
+Using the result in (b), we have 
+\[
+W_n = (n - k)  \frac{\hat{e}_R' \hat{e}_R - \hat{e}_u'\hat{e}_u}{\hat{e}_u'\hat{e}_u},
+\]
+which is also known as the \textit{F-statistic}.
+
+
+\noindent \textbf{The LM statistic:}
+Compared to the Wald statistic, 
+the LM statistic is replacing the un-restricted residuals with the restricted one, we have 
+\begin{align*}
+    LM_n & = (n - k) \left(\hat{e}_R'\hat{e}_R \right)^{-1}  \hat{d}' \bigg[R (X'X)^{-1}R' \bigg]^{-1} \hat{d} \\ 
+    & =  (n - k)  \frac{\hat{e}_R' \hat{e}_R - \hat{e}_u'\hat{e}_u}{\hat{e}_R'\hat{e}_R}
 \end{align*}
 
+
+\noindent \textbf{The LR statistic:}
+Using the result derived in class, we have 
+\begin{align*}
+LR_n & = n \log \left(\frac{\hat{\sigma}_R^2}{\hat{\sigma}_u^2} \right) \\ 
+  & =  n \log \left(\frac{\hat{e}_R' \hat{e}_R }{\hat{e}_u'\hat{e}_u} \right)
+\end{align*}
+
+
+\subsection*{(d) Answer} 
+Since $\frac{\hat{e}_R' \hat{e}_R - \hat{e}_u'\hat{e}_u}{\hat{e}_R'\hat{e}_R} < 1$, 
+we can depict $W_n, LM_n, LR_n$ in the following figure and conclude that 
+\[
+W_n > LR_n > LM_n
+\] 
+
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={$x$},
+        ylabel={Function values},
+        xmin=0, xmax=1,
+        ymin=-500, ymax=5000, % Rescaled y-axis
+        legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
+        axis lines=middle,
+        enlargelimits=true,
+        no markers
+    ]
+        % Plot LR_n = -n log(x), n=100
+        \addplot[blue, thick, domain=0.01:1, samples=200] {-50*ln(x)};
+        \addlegendentry{$LR_n$}
+
+        % Plot LM_n = n(1-x), n=100
+        \addplot[red, thick, domain=0:1, samples=200] {50*(1-x)};
+        \addlegendentry{$LM_n$}
+
+        % Plot W_n = n(1/x - 1), n=100
+        \addplot[black, thick, domain=0.01:1, samples=200] {50*(1/x - 1)};
+        \addlegendentry{$W_n $}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
 
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
