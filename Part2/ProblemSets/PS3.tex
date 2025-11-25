@@ -349,8 +349,62 @@ for n in [10, 50, 200]
 end
 \end{lstlisting}
 
+\subsection{(d). Answer}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{bootstrap/images/bootstrap_n10.png}
+  \caption{Residual Bootstrap (n = 10)}
+  \begin{minipage}{0.95\textwidth}{\footnotesize \textsc{Notes}:
+   The figures above display the distribution of the simulated distribution based on residual bootstrap.
+  \par}\end{minipage}
+\end{figure}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{bootstrap/images/bootstrap_n50.png}
+  \caption{Residual Bootstrap (n = 50)}
+  \begin{minipage}{0.95\textwidth}{\footnotesize \textsc{Notes}:
+   The figures above display the distribution of the simulated distribution based on residual bootstrap.
+  \par}\end{minipage}
+\end{figure}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{bootstrap/images/bootstrap_n200.png} 
+  \caption{Residual Bootstrap (n = 200)}
+  \begin{minipage}{0.95\textwidth}{\footnotesize \textsc{Notes}:
+   The figures above display the distribution of the simulated distribution based on residual bootstrap.
+  \par}\end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{bootstrap/images/condition_dist_based_n10.png}
+  \caption{Simulations based on conditional distribution (n = 10)}
+  \begin{minipage}{0.95\textwidth}{\footnotesize \textsc{Notes}:
+   The figures above display the distribution of the simulated distribution based on residual bootstrap.
+  \par}\end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{bootstrap/images/condition_dist_based_n50.png}  
+  \caption{Simulations based on conditional distribution (n = 50)}
+  \begin{minipage}{0.95\textwidth}{\footnotesize \textsc{Notes}:
+   The figures above display the distribution of the simulated distribution based on residual bootstrap.
+  \par}\end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{bootstrap/images/condition_dist_based_n50.png}  
+  \caption{Simulations based on conditional distribution (n = 200)}
+  \begin{minipage}{0.95\textwidth}{\footnotesize \textsc{Notes}:
+   The figures above display the distribution of the simulated distribution based on residual bootstrap.
+  \par}\end{minipage}
+\end{figure}
+
+\clearpage
 \section{Problem 3. 2SLS and IV}
 \subsection{(a). Answer}
 Recall that the rank condition is given by 
@@ -420,6 +474,78 @@ which is equivalent to the IV estimator when $A = \hat{\Pi}$:
 \[
 \hat{\beta}_{IV} = \left(\hat{\Pi}' Z'X \right)^{-1} \left(\hat{\Pi}' Z'y \right)
 \]
+
+
+\section{Problem 4. Nonlinear Transformations}
+\subsection{(a). Answer}
+Yes. We can prove the consistency of the 2SLS estimator using LLN under standard regularity assumptions:
+\begin{align*}
+    \hat{\beta}_{2SLS} - \beta & = (X'Z(Z'Z)^{-1}Z'X)^{-1} X'Z(Z'Z)^{-1}Z'e \\ 
+    & = \left(\frac{X'Z}{n}\left(\frac{Z'Z}{n}\right)^{-1}\frac{Z'X}{n}\right)^{-1} \frac{X'Z}{n}\left(\frac{Z'Z}{n}\right)^{-1}\frac{Z'e}{n} \\
+    & \rightarrow_p \left(\mathbb{E}[Z_i X_i']' \mathbb{E}[Z_i Z_i']^{-1} \mathbb{E}[Z_i X_i'] \right)^{-1} 
+    \mathbb{E}[Z_i X_i']' \mathbb{E}[Z_i Z_i']^{-1} \mathbb{E}[Z_i e_i] = 0
+\end{align*}
+
+
+\subsection{(b). Answer}
+No! This procedure is known as the ``forbidden regression''.
+Let $\hat{\pi}$ be the first stage coefficient.
+Denote the following by $\hat{X}$ 
+\[
+\hat{X} = \begin{bmatrix}
+    1 & \hat{\pi} z_1 & \hat{\pi}^2 z_1^2 \\ 
+    1 & \hat{\pi} z_2 & \hat{\pi}^2 z_2^2 \\ 
+    \vdots \\
+    1 & \hat{\pi} z_n & \hat{\pi}^2 z_n^2 \\ 
+\end{bmatrix}
+\]
+Then, the coefficient of the second stage is given by 
+\[
+\hat{\beta} = (\hat{X}'\hat{X})^{-1} (\hat{X}' y)
+\]
+It follows that 
+\begin{align*}
+\hat{\beta} - \beta & = (\hat{X}'\hat{X})^{-1} (\hat{X}' (X \beta + e)) \\ 
+& = \begin{bmatrix}
+    n & \hat{\pi} \sum_i z_i & \hat{\pi}^2 \sum_i z_i^2 \\ 
+    \hat{\pi} \sum_i z_i & \hat{\pi}^2 \sum_i z_i^2 & \hat{\pi}^3 \sum_i z_i^3 \\ 
+    \hat{\pi}^2 \sum_i z_i^2 & \hat{\pi}^3 \sum_i z_i^3 & \hat{\pi}^4 \sum_i z_i^4 \\ 
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+    n & \hat{\pi} \sum_i x_i & \hat{\pi}^2 \sum_i x_i^2 \\ 
+    \hat{\pi} \sum_i z_i & \hat{\pi}^2 \sum_i z_i x_i & \hat{\pi} \sum_i z_i x_i^2 \\ 
+    \hat{\pi}^2 \sum_i z_i^2 & \hat{\pi}^2 \sum_i z_i^2 x_i & \hat{\pi}^2 \sum_i z_i^2 x_i^2 \\ 
+\end{bmatrix}
+\begin{bmatrix}
+    \beta_0 \\ 
+    \beta_1 \\ 
+    \beta_2  \\ 
+\end{bmatrix}
+\\ 
+\\
+&\quad + \begin{bmatrix}
+    n & \hat{\pi} \sum_i z_i & \hat{\pi}^2 \sum_i z_i^2 \\ 
+    \hat{\pi} \sum_i z_i & \hat{\pi}^2 \sum_i z_i^2 & \hat{\pi}^3 \sum_i z_i^3 \\ 
+    \hat{\pi}^2 \sum_i z_i^2 & \hat{\pi}^3 \sum_i z_i^3 & \hat{\pi}^4 \sum_i z_i^4 \\ 
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+    \sum_i^n e_i \\ 
+    \hat{\pi} \sum_i^n z_i e_i \\ 
+    \hat{\pi} \sum_i^n z_i^2 e_i^2  \\ 
+\end{bmatrix}
+\end{align*}
+By LLN, $\sum_i^n z_i^2 e_i^2 \rightarrow \mathbb{E}[z_i^2 e_i]$;
+however, the linear model does NOT assume non-linear independence between $Z_i$ and $e_i$,
+concretely, $\mathbb{E}[z_i^2 e_i] \neq 0$, 
+the estimator $\hat{\beta}$ above is not consistent!
+
+
+\subsection{(c). Answer}
+There are two approaches to derive consistent estimator:
+\begin{enumerate}
+    \item Assume/argue that $\mathbb{E}[z_i^2 e_i] = 0$, and apply the estimator above. 
+    \item Find a different instrument $\tilde{Z}_i \neq Z_i$ for $x_i^2$, and run the regular  2SLS.
+\end{enumerate}
 
 
 %% =========== %% ========= %%
