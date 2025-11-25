@@ -30,6 +30,7 @@ Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.17}
 \usepackage{listings}
+\usepackage{xcolor}
 \usepackage{upquote}
 \usepackage{booktabs} %Package with \toprule and \bottomrule
 \usepackage{etoc}     %Package with \localtableofcontents
@@ -75,6 +76,39 @@ Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
   breakatwhitespace=false,
   tabsize=4
 }
+
+% Define Julia style for lstlisting
+\lstdefinelanguage{Julia}{
+    morekeywords={
+        for, end, in, if, else, elseif, while, break, continue, return, function,
+        struct, mutable, begin, do, using, import, export, const, let, local, global,
+        try, catch, finally, true, false, nothing, quote, macro, module, baremodule,
+        where, abstract, typealias, type, bitstype
+    },
+    sensitive=true,
+    morecomment=[l]{\#},
+    morestring=[b]",
+    morestring=[b]',
+}
+
+\lstset{
+    language=Julia,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    frame=single,
+    captionpos=b
+}
+
 
 \definecolor{lightblue}{rgb}{0.68, 0.85, 0.9} %
 
@@ -227,7 +261,7 @@ LR_n & = n \log \left(\frac{\hat{\sigma}_R^2}{\hat{\sigma}_u^2} \right) \\
 Since $\frac{\hat{e}_R' \hat{e}_R - \hat{e}_u'\hat{e}_u}{\hat{e}_R'\hat{e}_R} < 1$, 
 we can depict $W_n, LM_n, LR_n$ in the following figure and conclude that 
 \[
-W_n > LR_n > LM_n
+W_n > LR_n > LM_n \quad \text{with } (n \gg k)
 \] 
 
 
@@ -257,6 +291,136 @@ W_n > LR_n > LM_n
     \end{axis}
 \end{tikzpicture}
 \end{center}
+
+
+
+\section{Problem 2. Bootstrap}
+\subsection{(a) - (c)}
+\begin{lstlisting}[language=Julia, caption=Residual Bootstrap Code]
+# Residual bootstrap (part a, b, c)
+for n in [10, 50, 200]
+    Random.seed!(n) 
+    x = rand(Uniform(0,2), n)
+
+    Random.seed!(n+1)
+    e = rand(Uniform(-1,1), n)
+    y = beta_zero .+ beta_one .* x .+ e
+
+    S = 202  # Number of bootstrap replications
+    x_cat = hcat(ones(n), x)
+    beta_hat, var_beta_hat, residuals = ls_estimator(y, x_cat)
+
+    # Bootstrap distributions
+    beta_one_hat_bs = zeros(S)
+    t_stat_bs = zeros(S)
+
+    for s in 1:S
+        Random.seed!(s)
+        e_sim = rand(residuals, n)
+        y_sim = x_cat * beta_hat .+ e_sim
+        beta_hat_bs, var_beta_hat_bs, _ = ls_estimator(y_sim, x_cat)
+        beta_one_hat_bs[s] = beta_hat_bs[2]
+        beta_one_std_bs = sqrt(var_beta_hat_bs[2, 2])
+        t_stat_bs[s] = t_ratio(beta_hat_bs[2], beta_one, beta_one_std_bs)
+    end
+
+    t_stat_bs = sort(t_stat_bs)[2:end-1]
+    beta_one_hat_bs = sort(beta_one_hat_bs)[2:end-1]
+
+    # Compute 95th percentiles of bootstrap distributions
+    beta_one_95_bs = quantile(beta_one_hat_bs, 0.95)
+    t_stat_95_bs = quantile(t_stat_bs, 0.95)
+
+    # Visualization
+    p1 = histogram(beta_one_hat_bs, xlims=(0, 2), label="Bootstrap beta_one_hat", color=:blue, alpha=0.6)
+    vline!(p1, [beta_one_95_bs], label="95th Percentile", color=:red, linestyle=:dash, linewidth=3)
+    annotate!(p1, [(beta_one_95_bs, 3, text(string(round(beta_one_95_bs, digits=3)), :black, 12, :bold))])
+
+    p2 = histogram(t_stat_bs, xlims=(0, 4), label="Bootstrap t-stat", color=:green, alpha=0.6)
+    vline!(p2, [t_stat_95_bs], label="95th Percentile", color=:red, linestyle=:dash, linewidth=3)
+    annotate!(p2, [(t_stat_95_bs, 3, text(string(round(t_stat_95_bs, digits=3)), :black, 12, :bold))])
+
+    plot(p1, p2,
+        layout=(1, 2),
+        xlabel="Value",
+        ylabel="Frequency",
+        size=(800, 300)
+    )
+end
+\end{lstlisting}
+
+
+
+\section{Problem 3. 2SLS and IV}
+\subsection{(a). Answer}
+Recall that the rank condition is given by 
+\[
+\text{rank}\left(\mathbb{E}(z_i x_i') \right) = m
+\]
+Then, in the context of problem 3, we have 
+\[
+\text{rank}\left(
+    \begin{bmatrix}
+        1 & \mathbb{E}(x_{i2}) \\ 
+        \mathbb{E}(z_{i2}) & \mathbb{E}(z_{i2} x_{i2})
+    \end{bmatrix}
+    \right) = 2
+\]
+It follows that 
+\[
+\text{rank}\left(
+    \begin{bmatrix}
+        1 & \mathbb{E}(x_{i2}) \\ 
+        \mathbb{E}(z_{i2}) & \text{Cov}(z_{i2}, x_{i2}) + \mathbb{E}(z_{i2}) \mathbb{E}(x_{i2})
+    \end{bmatrix}
+    \right) = 2
+\]
+which holds iff $\text{Cov}(z_{i2}, x_{i2}) \neq 0$. \(\blacksquare\)
+
+
+\subsection{(b). Answer}
+Since $m = k = 2$, the inverse of $Z'X$ exists. 
+Therefore, we have 
+\begin{align*}
+\hat{\beta}_{2SLS} & = (X'Z(Z'Z)^{-1}Z'X)^{-1} X'Z(Z'Z)^{-1}Z'y \\ 
+& = (Z'X)^{-1} Z'y \\ 
+& = \begin{bmatrix}
+        \frac{\sum_i^n y_i}{n} \\ 
+        \frac{\sum_i^n z_{i,2} y_i}{\sum_i^n z_{i,2} x_{i,2}}
+    \end{bmatrix}
+\end{align*}
+Hence, we have 
+\[
+\hat{\beta}_{2, 2SLS} = \frac{\text{Cov}(z_{i,2}, y)}{\text{Cov}(z_{i, 2}, x_{i, 2})}
+\]
+
+\subsection{(c). Answer}
+In the general case that includes both ``just-identification'' and ``over-identification'',
+we have 
+\[
+A'Z'(y - X' \hat{\beta}_{IV}) = 0
+\]
+It follows that 
+\[
+\hat{\beta}_{IV} = \left(A'Z'X \right)^{-1} \left(A'Z'y \right)
+\]
+
+\subsection{(d). Answer}
+Since the structural model is given by $x'_i = z'_i \Pi + v'_i$, we have 
+\begin{align*}
+    & P_Z X = Z \hat{\Pi} \\ 
+    \Rightarrow & X'P_Z = X' P_Z = \hat{\Pi}' Z' 
+\end{align*}
+Therefore, the 2SLS estimator is given by 
+\begin{align*}
+\hat{\beta}_{2SLS} & = (X'P_Z X)^{-1} X'P_Z y     \\ 
+    & =  (\hat{\Pi}' Z' X)^{-1} \hat{\Pi}' Z' y
+\end{align*}
+which is equivalent to the IV estimator when $A = \hat{\Pi}$:
+\[
+\hat{\beta}_{IV} = \left(\hat{\Pi}' Z'X \right)^{-1} \left(\hat{\Pi}' Z'y \right)
+\]
+
 
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}

@@ -73,11 +73,7 @@ for n in [10, 50, 200]
         ylabel="Frequency",
         size=(800, 300)
     )
-    println("Residual Bootstrap (n = $n):")
-    println("  95th percentile of β̂1: $β̂1_95_bs")
-    println("  95th percentile of t-stat: $t_stat_95_bs")
-    println("  Asymptotic 95th percentile of t-stat: $asymptotic_95\n")
-    savefig("images/bootstrap_n$n.png")
+
 end
 
 # question (d): Simulation using conditional distribution of residuals 
@@ -123,9 +119,5 @@ for n in [10, 50, 200]
         ylabel="Frequency",
         size=(800, 300)
     )
-    println("Conditional Residuals (n = $n):")
-    println("  95th percentile of β̂1: $β̂1_95_cond")
-    println("  95th percentile of t-stat: $t_stat_95_cond")
-    println("  Asymptotic 95th percentile of t-stat: $asymptotic_95\n")
-    savefig("images/condition_dist_based_n$n.png")
+
 end
