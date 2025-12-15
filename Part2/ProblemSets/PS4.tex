@@ -250,9 +250,32 @@ H \;=\; n(\hat{\beta}_1-\hat{\beta}_2)'\,(V_{11}-V_{22})^{-1}\,(\hat{\beta}_1-\h
 where $k=\dim(\beta)$.
 
 
+\section{Problem 2. Abadie (2003)'s $\kappa$ function.}
+\subsection{a. solution}
+begin{table}[htbp]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        & \textbf{$Z_i$ = 0} & \textbf{$Z_i$ = 1} \\ \midrule
+         $D_i$ = 0 &  Never taker &  \\
+        \( k_{max} \) & \( 1.05 \cdot k_{ss} \) \\
+        \( k_{vec} \) & \( k_{min} : \frac{k_{max} - k_{min}}{I-1} : k_{max} \) \\
+        \( \text{max\_iter} \) & \( 1000 \) (maximum number of iterations) \\
+        \( \text{tol} \) & \( 10^{-8} \) (tolerance for convergence) \\ \bottomrule
+    \end{tabular}
+    \caption{Summary of Parameters}
+\end{table}
+
+
+
 
 \section{Problem 3. Weak and Many Instrumental Variables}
 \subsection{a. Answer}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{weak_iv/images/comparison_ols_iv.png}
+  \caption{OLS vs. IV under weak/many intruments}
+\end{figure}
 
 
 %% =========== %% ========= %%
