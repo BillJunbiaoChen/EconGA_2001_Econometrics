@@ -1,0 +1,233 @@
+\documentclass[11pt]{article}
+
+%%METADATA
+\title{GA2001 Econometrics (Part 2) \\Solution to Problem Set 4}
+\author{
+Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
+}
+\date{\today}
+
+
+%%PACKAGES
+\usepackage{mdframed} % For boxed environments
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[hyphens]{url}
+\usepackage{natbib}
+\usepackage[font=normalsize,labelfont=bf]{caption}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue}
+\usepackage{stmaryrd}  %Package with \boxast command
+\usepackage{enumerate}% http://ctan.org/pkg/enumerate %Supports lowercase Roman-letter enumeration
+\usepackage{verbatim} %Package with \begin{comment} environment
+%\usepackage{enumitem}
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{upquote}
+\usepackage{booktabs} %Package with \toprule and \bottomrule
+\usepackage{etoc}     %Package with \localtableofcontents
+\usepackage{placeins}    %Package that prevent repositioning the tables
+\usepackage{multicol}
+\usepackage{bm}
+\usepackage{subfig}
+\usepackage{csquotes}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=bash,
+  frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=3
+}
+
+\lstset{language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4
+}
+
+% Define Julia style for lstlisting
+\lstdefinelanguage{Julia}{
+    morekeywords={
+        for, end, in, if, else, elseif, while, break, continue, return, function,
+        struct, mutable, begin, do, using, import, export, const, let, local, global,
+        try, catch, finally, true, false, nothing, quote, macro, module, baremodule,
+        where, abstract, typealias, type, bitstype
+    },
+    sensitive=true,
+    morecomment=[l]{\#},
+    morestring=[b]",
+    morestring=[b]',
+}
+
+\lstset{
+    language=Julia,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    frame=single,
+    captionpos=b
+}
+
+
+\definecolor{lightblue}{rgb}{0.68, 0.85, 0.9} %
+
+%CUSTOM DEFINITIONS
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{remark}{Remark}
+\setcounter{secnumdepth}{3}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{automata, positioning, arrows, calc}
+
+\tikzset{
+	->,  % makes the edges directed
+	>=stealth, % makes the arrow heads bold
+	shorten >=2pt, shorten <=2pt, % shorten the arrow
+	node distance=3cm, % specifies the minimum distance between two nodes. Change if n
+	every state/.style={draw=blue!55,very thick,fill=blue!20}, % sets the properties for each ’state’ n
+	initial text=$ $, % sets the text that appears on the start arrow
+ }
+
+%% PROPOSITION
+% Define the Proposition environment
+\newmdenv[
+  innerleftmargin=10pt, 
+  innerrightmargin=10pt,
+  innertopmargin=10pt,
+  innerbottommargin=10pt,
+  linecolor=black, 
+  linewidth=1pt,
+  backgroundcolor=white, 
+  roundcorner=5pt
+]{propositionbox}
+
+\newtheoremstyle{boldtitle} % Define a new theorem style
+  {10pt} % Space above
+  {10pt} % Space below
+  {\itshape} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  { } % Space after theorem head
+  {} % Theorem head spec
+
+\theoremstyle{boldtitle} % Use the custom style
+\newtheorem{proposition}{Proposition} % Define the proposition environment
+
+% Redefine the proposition environment to use the box
+\newenvironment{boxedproposition}[1][]
+{\begin{propositionbox}\begin{proposition}[#1]}
+{\end{proposition}\end{propositionbox}}
+
+%%FORMATTING
+\usepackage[bottom]{footmisc}
+\onehalfspacing
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\bibliographystyle{../bib/aeanobold-oxford}
+
+
+%main text
+\begin{document}
+\maketitle
+\section{Problem 1. Hausman-Wu Test}
+\subsection{a. Answer}
+To show $P_Z P_{Z_1} = P_{Z_1}$, note that 
+\[
+Z_1 = Z \begin{bmatrix}
+    I_{k1} \\ 0
+\end{bmatrix}
+\]
+Hence, we have 
+\begin{align*}
+Z(Z'Z)^{-1}Z' Z_1(Z_1'Z_1)^{-1}Z_1' & = Z(Z'Z)^{-1} Z' Z \begin{bmatrix}
+    I_{k1} \\ 0
+\end{bmatrix} (Z_1'Z_1)^{-1}Z_1' \\ 
+& = Z \begin{bmatrix}
+    I_{k1} \\ 0
+\end{bmatrix}(Z_1'Z_1)^{-1}Z_1'\\
+& = Z_1(Z_1'Z_1)Z_1'
+\end{align*}
+
+\subsection{b. Answer}
+Using CLT, we have 
+\[
+\sqrt{n}\left(\begin{bmatrix} \hat{\beta}_1 \\ \hat{\beta}_2 \end{bmatrix} 
+- \begin{bmatrix} \beta  \\ \beta \end{bmatrix}  \right)
+\stackrel{d}{\rightarrow} \mathcal{N}(0, V)
+\]
+where $V$ is given by 
+\[
+V_{11}
+= \sigma_0^{2}\left(
+\mathbb{E}\!\left[x_i z_{i1}'\right]\,
+\mathbb{E}\!\left[z_{i1} z_{i1}'\right]^{-1}\,
+\mathbb{E}\!\left[z_{i1} x_i'\right]
+\right)^{-1}
+\]
+\[
+V_{22}
+= \sigma_0^{2}\left(
+\mathbb{E}\!\left[x_i z_i'\right]\,
+\mathbb{E}\!\left[z_i z_i'\right]^{-1}\,
+\mathbb{E}\!\left[z_i x_i'\right]
+\right)^{-1}
+\]
+\[
+V_{12}
+\sigma_0^{2}\left(
+\mathbb{E}\!\left[x_i z_i'\right]\,
+\mathbb{E}\!\left[z_i z_i'\right]^{-1}\,
+\mathbb{E}\!\left[z_i x_i'\right]
+\right)^{-1}
+\]
+\[
+V_{21} = V_{12}' = V_{12}.
+\]
+%% =========== %% ========= %%
+\bibliography{../bib/notes.bib}
+
+\end{document}
