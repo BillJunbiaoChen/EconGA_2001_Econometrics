@@ -192,7 +192,7 @@ Z(Z'Z)^{-1}Z' Z_1(Z_1'Z_1)^{-1}Z_1' & = Z(Z'Z)^{-1} Z' Z \begin{bmatrix}
 & = Z_1(Z_1'Z_1)Z_1'
 \end{align*}
 
-\subsection{b. Answer}
+\subsection{b and c. Answers}
 Using CLT, we have 
 \[
 \sqrt{n}\left(\begin{bmatrix} \hat{\beta}_1 \\ \hat{\beta}_2 \end{bmatrix} 
@@ -217,7 +217,7 @@ V_{22}
 \right)^{-1}
 \]
 \[
-V_{12}
+V_{12} = 
 \sigma_0^{2}\left(
 \mathbb{E}\!\left[x_i z_i'\right]\,
 \mathbb{E}\!\left[z_i z_i'\right]^{-1}\,
@@ -227,6 +227,34 @@ V_{12}
 \[
 V_{21} = V_{12}' = V_{12}.
 \]
+Hence we have 
+\[
+V_{22} - V_{12} - V_{21} = -V_{22}.
+\]
+
+\subsection{d. Answer}
+Applying Delta method to the result above, we have 
+\[
+\sqrt{n} (\hat{\beta}_1 - \hat{\beta}_2) \stackrel{d}{\rightarrow} 
+\mathcal{N} \left(0,\ V_{11}+V_{22}-V_{12}-V_{21}\right) 
+= 
+\mathcal{N}(0, V_{11} - V_{22}).
+\]
+\textbf{Remark:} Under the null hypothesis that both estimators are consistent 
+and under regularity conditions ensuring a joint CLT,
+the Hausman-Wu statistic follows $\chi^2$ distribution.
+\[
+H \;=\; n(\hat{\beta}_1-\hat{\beta}_2)'\,(V_{11}-V_{22})^{-1}\,(\hat{\beta}_1-\hat{\beta}_2)
+\ \xrightarrow{d}\ \chi^2_{k},
+\]
+where $k=\dim(\beta)$.
+
+
+
+\section{Problem 3. Weak and Many Instrumental Variables}
+\subsection{a. Answer}
+
+
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
 
