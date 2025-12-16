@@ -445,6 +445,22 @@ Hence, $\hat{\beta}_{FE}$ is unbiased if the individual FE is correlated with $X
 the witin-estimator is biased (similar to an OVB). 
 The magnitude of bias is $\mathbb{E}\left[\left(\bar{X}' \bar{X} \right)^{-1} \bar{X}' \alpha \right]$.
 
+
+\subsection{d. Answer}
+Since $\hat{\beta}_{GLS} = R\hat{\beta}_{FE} + (1 - R)\hat{\beta}_{W}$, we have 
+\[
+\text{Bias}(\hat{\beta}_{GLS}) = (1 - R) \text{Bias}(\hat{\beta}_{W}) = (1 - R) \mathbb{E}\left[\left(\bar{X}' \bar{X} \right)^{-1} \bar{X}' \alpha \right].
+\]
+As $\hat{\beta}_{GLS} \rightarrow \hat{\beta}_{FE}$ as $T \rightarrow \infty$, 
+the bias of the GLS estimator shrinks to zero as $T \rightarrow \infty$.
+
+
+
+\section{Fixed Effects and Measurement Error}
+\subsection{a. Solution}
+
+
+
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
 
