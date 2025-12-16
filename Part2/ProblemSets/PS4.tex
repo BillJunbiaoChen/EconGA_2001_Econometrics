@@ -39,7 +39,6 @@ Junbiao Chen\thanks{E-mail: jc14076@nyu.edu.}
 \usepackage{bm}
 \usepackage{subfig}
 \usepackage{csquotes}
-
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -250,33 +249,201 @@ H \;=\; n(\hat{\beta}_1-\hat{\beta}_2)'\,(V_{11}-V_{22})^{-1}\,(\hat{\beta}_1-\h
 where $k=\dim(\beta)$.
 
 
-\section{Problem 2. Abadie (2003)'s $\kappa$ function.}
+\section{Problem 2. Abadie (2003)}
 \subsection{a. solution}
-begin{table}[htbp]
-    \centering
-    \begin{tabular}{lll}
-        \toprule
-        & \textbf{$Z_i$ = 0} & \textbf{$Z_i$ = 1} \\ \midrule
-         $D_i$ = 0 &  Never taker &  \\
-        \( k_{max} \) & \( 1.05 \cdot k_{ss} \) \\
-        \( k_{vec} \) & \( k_{min} : \frac{k_{max} - k_{min}}{I-1} : k_{max} \) \\
-        \( \text{max\_iter} \) & \( 1000 \) (maximum number of iterations) \\
-        \( \text{tol} \) & \( 10^{-8} \) (tolerance for convergence) \\ \bottomrule
-    \end{tabular}
-    \caption{Summary of Parameters}
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{$Z_i$} \\
+\hline
+ & $D_i(1) = 0$ & $D_i(1) = 1$ \\
+\hline
+$D_i(0) = 0$ & never takers & compliers \\
+\hline
+$D_i(0) = 1$ & defiers & always takers \\
+\hline
+\end{tabular}
+\end{center}
 \end{table}
 
+\subsection{b. solution}
+By the law of total expectation, partitioning by the four latent compliance types $(D_{0i}, D_{1i})$:
+$$
+\mathbb{E}[X_{i}] = \sum_{l \in \{0, 1\}} \sum_{m \in \{0, 1\}} \mathbb{E}[X_{i}|D_{0i}=l, D_{1i}=m] \cdot P(D_{0i}=l, D_{1i}=m)
+$$
+Using the notation $h_{lm}$ and $\pi_{lm}$:
+$$
+\mathbb{E}[X_{i}] = \sum_{l,m} \pi_{lm} \cdot h_{lm}
+$$
+Expanding the sum:
+$$
+\mathbb{E}[X_{i}] = h_{00}\pi_{00} + h_{01}\pi_{01} + h_{10}\pi_{10} + h_{11}\pi_{11}
+$$
 
+\subsection{c. Solution}
+Show that $\mathbb{E}[D_{i}(1-Z_{i})X_{i}]=\mathbb{E}[X_{i}|D_{i}=1,Z_{i}=0]P(D_{i}=1|Z_{i}=0)P(Z_{i}=0)$.
+
+The term $D_{i}(1-Z_{i})X_{i}$ is non-zero only when $D_i=1$ and $Z_i=0$.
+Using the law of total expectation conditioned on $D_i$ and $Z_i$:
+\begin{align*}
+\mathbb{E}[D_{i}(1-Z_{i})X_{i}] &= \mathbb{E}[D_{i}(1-Z_{i})X_{i} | D_i=1, Z_i=0] \cdot P(D_i=1, Z_i=0) \\
+&= \mathbb{E}[1 \cdot (1-0) X_{i} | D_i=1, Z_i=0] \cdot P(D_i=1, Z_i=0) \\
+&= \mathbb{E}[X_{i} | D_i=1, Z_i=0] \cdot P(D_{i}=1|Z_{i}=0) \cdot P(Z_{i}=0)
+\end{align*}
+
+\subsection{d. Solution}
+Show that under the conditions of monotonicity and $(X_{i},D_{i}) \perp Z_{i}$:
+$$
+\mathbb{E}[D_{i}(1-Z_{i})X_{i}]=\mathbb{E}[X_{i}|D_{0i}=1,D_{1i}=1]P(D_{0i}=1,D_{1i}=1)P(Z_{i}=0)
+$$
+
+From part (c):
+$$
+\mathbb{E}[D_{i}(1-Z_{i})X_{i}] = \mathbb{E}[X_{i} | D_i=1, Z_i=0] \cdot P(D_{i}=1|Z_{i}=0) \cdot P(Z_{i}=0)
+$$
+When $Z_i=0$, $D_i = D_{0i}$.
+\begin{enumerate}
+    \item $P(D_{i}=1|Z_{i}=0) = P(D_{0i}=1|Z_{i}=0)$. By independence, this is $P(D_{0i}=1)$.
+    Under monotonicity ($\pi_{10}=0$), $P(D_{0i}=1) = P(D_{0i}=1, D_{1i}=1) = \pi_{11}$.
+    \item $\mathbb{E}[X_{i} | D_i=1, Z_i=0] = \mathbb{E}[X_{i} | D_{0i}=1, Z_i=0]$. By independence and monotonicity, $D_{0i}=1$ implies membership in the Always-Taker group ($D_{1i}=1$). Thus, $\mathbb{E}[X_{i} | D_{0i}=1, Z_i=0] = \mathbb{E}[X_{i} | D_{0i}=1, D_{1i}=1] = h_{11}$.
+\end{enumerate}
+Substituting these results:
+$$
+\mathbb{E}[D_{i}(1-Z_{i})X_{i}] = \mathbb{E}[X_{i}|D_{0i}=1,D_{1i}=1] \cdot P(D_{0i}=1,D_{1i}=1) \cdot P(Z_{i}=0)
+$$
+
+\subsection{e. Solution}
+Show that under the same conditions:
+$$
+\mathbb{E}[(1-D_{i})Z_{i}X_{i}]=\mathbb{E}[X_{i}|D_{0i}=0,D_{1i}=0]P(D_{0i}=0,D_{1i}=0)P(Z_{i}=1)
+$$
+
+The term $(1-D_i)Z_iX_i$ is non-zero only when $D_i=0$ and $Z_i=1$.
+\begin{align*}
+\mathbb{E}[(1-D_{i})Z_{i}X_{i}] &= \mathbb{E}[X_{i} | D_i=0, Z_i=1] \cdot P(D_{i}=0|Z_{i}=1) \cdot P(Z_{i}=1)
+\end{align*}
+When $Z_i=1$, $D_i = D_{1i}$.
+\begin{enumerate}
+    \item $P(D_{i}=0|Z_{i}=1) = P(D_{1i}=0|Z_{i}=1)$. By independence, this is $P(D_{1i}=0)$.
+    Under monotonicity ($\pi_{10}=0$), $P(D_{1i}=0) = P(D_{0i}=0, D_{1i}=0) = \pi_{00}$.
+    \item $\mathbb{E}[X_{i} | D_i=0, Z_i=1] = \mathbb{E}[X_{i} | D_{1i}=0, Z_i=1]$. By independence and monotonicity, $D_{1i}=0$ implies membership in the Never-Taker group ($D_{0i}=0$). Thus, $\mathbb{E}[X_{i} | D_{1i}=0, Z_i=1] = \mathbb{E}[X_{i} | D_{0i}=0, D_{1i}=0] = h_{00}$.
+\end{enumerate}
+Substituting these results:
+$$
+\mathbb{E}[(1-D_{i})Z_{i}X_{i}] = \mathbb{E}[X_{i}|D_{0i}=0,D_{1i}=0] \cdot P(D_{0i}=0,D_{1i}=0) \cdot P(Z_{i}=1)
+$$
+
+\subsection{f. solution}
+Show that for the function $w_{i}:=1-\frac{D_{i}(1-Z_{i})}{P(Z_{i}=0)}-\frac{(1-D_{i})Z_{i}}{P(Z_{i}=1)}$,
+$$
+\mathbb{E}[w_{i}X_{i}]=\mathbb{E}[X_{i}|D_{0i}=0,D_{1i}=1]P(D_{0i}=0,D_{1i}=1)
+$$
+
+Expand $\mathbb{E}[w_{i}X_{i}]$:
+$$
+\mathbb{E}[w_{i}X_{i}] = \mathbb{E}[X_{i}] - \frac{\mathbb{E}[D_{i}(1-Z_{i})X_{i}]}{P(Z_{i}=0)} - \frac{\mathbb{E}[(1-D_{i})Z_{i}X_{i}]}{P(Z_{i}=1)}
+$$
+Substitute the simplified expressions from (d) and (e):
+\begin{align*}
+\mathbb{E}[w_{i}X_{i}] &= \mathbb{E}[X_{i}] - \mathbb{E}[X_{i}|D_{0i}=1,D_{1i}=1]P(D_{0i}=1,D_{1i}=1) \\
+& \quad - \mathbb{E}[X_{i}|D_{0i}=0,D_{1i}=0]P(D_{0i}=0,D_{1i}=0)
+\end{align*}
+Using $h_{lm}$ and $\pi_{lm}$ notation:
+$$
+\mathbb{E}[w_{i}X_{i}] = \mathbb{E}[X_{i}] - h_{11}\pi_{11} - h_{00}\pi_{00}
+$$
+Substitute $\mathbb{E}[X_{i}] = h_{00}\pi_{00} + h_{01}\pi_{01} + h_{10}\pi_{10} + h_{11}\pi_{11}$ from part (b):
+\begin{align*}
+\mathbb{E}[w_{i}X_{i}] &= (h_{00}\pi_{00} + h_{01}\pi_{01} + h_{10}\pi_{10} + h_{11}\pi_{11}) - h_{11}\pi_{11} - h_{00}\pi_{00} \\
+&= h_{01}\pi_{01} + h_{10}\pi_{10}
+\end{align*}
+Under monotonicity, $\pi_{10}=P(D_{0i}=1, D_{1i}=0)=0$.
+$$
+\mathbb{E}[w_{i}X_{i}] = h_{01}\pi_{01} = \mathbb{E}[X_{i}|D_{0i}=0,D_{1i}=1]P(D_{0i}=0,D_{1i}=1)
+$$
+
+% \paragraph{Usefulness:}
+% The group $(D_{0i}=0, D_{1i}=1)$ is the **Complier** group. The result shows that $\mathbb{E}[w_{i}X_{i}]$ is the expected value of $X_i$ among compliers, weighted by the probability of being a complier.
+
+% The mean characteristic of the complier group, $\mathbb{E}[X_{i}|\text{Compliers}]$, can be estimated using the sample analogue of the ratio:
+% $$
+% \mathbb{E}[X_{i}|\text{Compliers}] = \frac{\mathbb{E}[w_{i}X_{i}]}{\mathbb{E}[w_{i}]}
+% $$
+% where $\mathbb{E}[w_{i}] = P(D_{0i}=0, D_{1i}=1)$, the probability of being a complier. This is useful because it allows the researcher to characterize the observed characteristics ($X_i$) of the complier group, which is the subset of individuals for whom the 2SLS estimator (LATE) identifies the treatment effect.
 
 
 \section{Problem 3. Weak and Many Instrumental Variables}
 \subsection{a. Answer}
+We can see that adding junk instruments contaminates the slope estimate of 2SLS.
+However, if we have large number of observations, this contamination is not a big issue.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{weak_iv/images/comparison_ols_iv.png}
-  \caption{OLS vs. IV under weak/many intruments}
+  \caption{Slope: OLS vs. IV under weak/many intruments}
 \end{figure}
 
+
+\subsection{b. Answer}
+See Figure~3.2.
+
+\begin{figure}[htbp]
+  \label{fig:many_iv_se}
+  \centering
+  \includegraphics[width=0.9\textwidth]{weak_iv/images/mean_2sls_se_by_nK.png}
+  \caption{Standard Error: IV under weak/many intruments}
+\end{figure}
+
+
+% \subsection{c. Answer}
+
+
+\section{GLS vs. FE Estimator}
+\subsection{a. Answer}
+By the definition of $\dot{X}$, $\bar{X}$, $\dot{y}$, and $\bar{y}$, we have 
+\[
+X_* = \dot{X} + \lambda \bar{X}, \quad \text{ and } \quad y_* = \dot{y} + \lambda \bar{y}
+\]
+Hence, we have 
+\begin{align*}
+\hat{\beta}_{GLS} & = \left[X_*'X_* \right]^{-1}X_*' y_* \\
+& = \left[\dot{X}'\dot{X} + \lambda^2 T  \bar{X}' \bar{X} \right]^{-1} 
+\left( \dot{X}'\dot{y} + \lambda^2 T  \bar{X}' \bar{y}  \right).
+\end{align*}
+
+\subsection{b. Answer}
+Observe that 
+$\hat{\beta}_{GLS} - \hat{\beta}_{w} = R \left(\hat{\beta}_{FE} - \hat{\beta}_{w}\right)$.
+Hence, we have 
+\begin{align*}
+R & = \left(\hat{\beta}_{GLS} - \hat{\beta}_{w}  \right) \left(\hat{\beta}_{FE} - \hat{\beta}_{w}\right)^{-1} \\ 
+& = \left(I + T \lambda^2 \left(\bar{X}'\bar{X} \right)^{-1}\bar{X}'\bar{X} \right)^{-1}
+\end{align*}
+
+
+\subsection{c. Answer}
+As $T \rightarrow$, the relative weight shrinks to zero.
+It follows that $\hat{\beta}_{GLS} \rightarrow \hat{\beta}_{FE}$.
+
+\subsection{d. Answer}
+Denoting $\otimes$ the kronecker product, we can derive 
+\begin{align*}
+\mathbb{E}(\hat{\beta}_{FE}) & = 
+\mathbb{E}\left[\left(X' (I_n \otimes M_T) X \right)^{-1} \left(X' (I_n \otimes M_T) y \right)\right] \\ 
+& = \beta + \mathbb{E}\left[\left(X' (I_n \otimes M_T) X \right)^{-1} \left(X' (I_n \otimes M_T) (\alpha \otimes 1_T) \right)\right] \\
+& = \beta
+\end{align*}
+
+as well as
+\begin{align*}
+\mathbb{E}(\hat{\beta}_{W}) & = 
+\mathbb{E}\left[\left(\bar{X}' \bar{X} \right)^{-1} \left(\bar{X}' \bar{y} \right)\right] \\ 
+& = \beta + \mathbb{E}\left[\left(\bar{X}' \bar{X} \right)^{-1} \bar{X}' \alpha \right]
+\end{align*}
+
+Hence, $\hat{\beta}_{FE}$ is unbiased if the individual FE is correlated with $X$, while 
+the witin-estimator is biased (similar to an OVB). 
+The magnitude of bias is $\mathbb{E}\left[\left(\bar{X}' \bar{X} \right)^{-1} \bar{X}' \alpha \right]$.
 
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
