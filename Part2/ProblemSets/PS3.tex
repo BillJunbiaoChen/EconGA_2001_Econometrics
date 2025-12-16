@@ -235,9 +235,12 @@ Given the results in (b), we can express the Wald, the LM, and the LR statistics
 \end{align*}
 Using the result in (b), we have 
 \[
-W_n = (n - k)  \frac{\hat{e}_R' \hat{e}_R - \hat{e}_u'\hat{e}_u}{\hat{e}_u'\hat{e}_u},
+W_n = (n - k) \frac{\hat{e}_R' \hat{e}_R - \hat{e}_u'\hat{e}_u}{\hat{e}_u'\hat{e}_u},
 \]
-which is also known as the \textit{F-statistic}.
+which is related to the \textit{F-statistic}: 
+\[
+W_n = q F_n = \frac{(n - k)}{q} \left[\frac{\hat{e}_R' \hat{e}_R - \hat{e}_u'\hat{e}_u}{\hat{e}_u'\hat{e}_u} \right].
+\]
 
 
 \noindent \textbf{The LM statistic:}

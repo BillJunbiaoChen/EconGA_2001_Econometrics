@@ -293,11 +293,6 @@ Using the law of total expectation conditioned on $D_i$ and $Z_i$:
 \end{align*}
 
 \subsection{d. Solution}
-Show that under the conditions of monotonicity and $(X_{i},D_{i}) \perp Z_{i}$:
-$$
-\mathbb{E}[D_{i}(1-Z_{i})X_{i}]=\mathbb{E}[X_{i}|D_{0i}=1,D_{1i}=1]P(D_{0i}=1,D_{1i}=1)P(Z_{i}=0)
-$$
-
 From part (c):
 $$
 \mathbb{E}[D_{i}(1-Z_{i})X_{i}] = \mathbb{E}[X_{i} | D_i=1, Z_i=0] \cdot P(D_{i}=1|Z_{i}=0) \cdot P(Z_{i}=0)
@@ -314,15 +309,6 @@ $$
 $$
 
 \subsection{e. Solution}
-Show that under the same conditions:
-$$
-\mathbb{E}[(1-D_{i})Z_{i}X_{i}]=\mathbb{E}[X_{i}|D_{0i}=0,D_{1i}=0]P(D_{0i}=0,D_{1i}=0)P(Z_{i}=1)
-$$
-
-The term $(1-D_i)Z_iX_i$ is non-zero only when $D_i=0$ and $Z_i=1$.
-\begin{align*}
-\mathbb{E}[(1-D_{i})Z_{i}X_{i}] &= \mathbb{E}[X_{i} | D_i=0, Z_i=1] \cdot P(D_{i}=0|Z_{i}=1) \cdot P(Z_{i}=1)
-\end{align*}
 When $Z_i=1$, $D_i = D_{1i}$.
 \begin{enumerate}
     \item $P(D_{i}=0|Z_{i}=1) = P(D_{1i}=0|Z_{i}=1)$. By independence, this is $P(D_{1i}=0)$.
@@ -335,12 +321,7 @@ $$
 $$
 
 \subsection{f. solution}
-Show that for the function $w_{i}:=1-\frac{D_{i}(1-Z_{i})}{P(Z_{i}=0)}-\frac{(1-D_{i})Z_{i}}{P(Z_{i}=1)}$,
-$$
-\mathbb{E}[w_{i}X_{i}]=\mathbb{E}[X_{i}|D_{0i}=0,D_{1i}=1]P(D_{0i}=0,D_{1i}=1)
-$$
-
-Expand $\mathbb{E}[w_{i}X_{i}]$:
+First, we can express $\mathbb{E}[w_{i}X_{i}]$ as follows:
 $$
 \mathbb{E}[w_{i}X_{i}] = \mathbb{E}[X_{i}] - \frac{\mathbb{E}[D_{i}(1-Z_{i})X_{i}]}{P(Z_{i}=0)} - \frac{\mathbb{E}[(1-D_{i})Z_{i}X_{i}]}{P(Z_{i}=1)}
 $$
@@ -374,6 +355,11 @@ $$
 
 
 \section{Problem 3. Weak and Many Instrumental Variables}
+My code is available at 
+
+\texttt{
+  https://github.com/BillJunbiaoChen/EconGA\_2001\_Econometrics/Part2/ProblemSets/weak\_iv.
+}
 \subsection{a. Answer}
 We can see that adding junk instruments contaminates the slope estimate of 2SLS.
 However, if we have large number of observations, this contamination is not a big issue.
@@ -422,7 +408,7 @@ R & = \left(\hat{\beta}_{GLS} - \hat{\beta}_{w}  \right) \left(\hat{\beta}_{FE} 
 
 
 \subsection{c. Answer}
-As $T \rightarrow$, the relative weight shrinks to zero.
+As $T \rightarrow \infty$, the relative weight shrinks to zero.
 It follows that $\hat{\beta}_{GLS} \rightarrow \hat{\beta}_{FE}$.
 
 \subsection{d. Answer}
@@ -458,8 +444,107 @@ the bias of the GLS estimator shrinks to zero as $T \rightarrow \infty$.
 
 \section{Fixed Effects and Measurement Error}
 \subsection{a. Solution}
+Since the model specification follows a classical measurement error model, we have 
+\[
+\Delta x_{i,t} = (\rho - 1) x_{i,t-1}^* + \xi_{it} + \Delta v_{i,t}
+\]
+\[
+\Delta y_{i,t} = \beta_1 (\rho - 1) x_{i,t-1}^* + \beta_1 \xi_{it} + \Delta v_{i,t} + \Delta e_{i,t}
+\]
+Hence, the probability limit of $\hat{\beta}_{FD}$ is 
+\begin{align*}
+\text{plim}(\hat{\beta}_{FD}) & = \frac{\text{Cov}(\Delta x_{i,t}, \Delta y_{i,t})}{\text{Var}(\Delta x_{i,t})} \\
+& = \frac{\beta (\rho - 1)^2 \text{Cov}(\Delta x_{i,t-1}^*) + \beta_1 \sigma_\xi^2}{(\rho - 1)^2 \text{Cov}(\Delta x_{i,t-1}^*) + \sigma_\xi^2 + 2 \sigma_v^2}
+\end{align*}
 
 
+\subsection{b. Solution}
+Define $\Delta^2 x_{it} = x_{it} - x_{it-2}$.
+Following similar derivation above, we have 
+\begin{align*}
+\text{plim}(\hat{\beta}_{SD}) & = \frac{\text{Cov}(\Delta^2 x_{i,t}, \Delta^2 y_{i,t})}{\text{Var}(\Delta^2 x_{i,t})} \\
+& = \frac{\beta (\rho - 1)^2 \text{Cov}(\Delta x_{i,t-2}^*) + \beta_1 \sigma_\xi^2 + \beta_1 \rho^2 \sigma_\xi^2
+}{(\rho^2 - 1)^2 \text{Cov}(\Delta x_{i,t-1}^*) + \sigma_\xi^2 + \rho^2 \sigma_\xi^2 +  2 \sigma_v^2}
+\end{align*}
+
+\subsection{c. Solution}
+Since
+\begin{align*}
+\overline{y}_{i} & = \frac{1}{T}\sum_{t=1}^{T}y_{it}=\frac{1}{T}\sum_{t=1}^{T}(\beta_{1}x_{it}^{*}+\alpha_{i}+e_{it}) \\ 
+& = \beta_{1}\overline{x_{i}}^{*}+\alpha_{i}+\overline{e}_{i}
+\end{align*}
+and
+
+$$
+y_{it}-\overline{y}_{i}=\beta_{1}(x_{it}^{*}-\overline{x_{i}}^{*})+(e_{it}-\overline{e}_{i})
+$$
+
+$$
+\overline{x}_{i}=\frac{1}{T}\sum_{t=1}^{T}x_{it}=\frac{1}{T}\sum_{t=1}^{T}(x_{it}^{*}+v_{it})=\overline{x_{i}}^{*}+\overline{v}_{i}
+$$
+
+and
+$$
+x_{it}-\overline{x}_{i}=(x_{it}^{*}-\overline{x_{i}}^{*})+(v_{it}-\overline{v}_{i})
+$$
+
+Assume Stationarity on the AR(1) process.
+$$
+Var(X_{it}^{*})=Var(\rho X_{it-1}^{*}+\xi_{it})=\rho^{2}Var(X_{it-1}^{*})+\sigma_{\xi}^{2}
+$$
+
+So $Var(X_{it}^{*})\equiv\sigma_{*}^{2}=\frac{\sigma_{\xi}^{2}}{1-\rho^{2}}$
+
+\begin{align*}
+  Var(x_{it}^{*}-\overline{x}_{i}^{*}) & = Var(x_{it}^{*})-2Cov(x_{it}^{*},\overline{x}_{i}^{*})+Var(\overline{x}_{i}^{*}) \\
+& = \frac{\sigma_{\xi}^{2}}{1-\rho^{2}}+\frac{1}{T}\cdot\frac{\sigma_{\xi}^{2}}{1-\rho^{2}}-2Cov(x_{it}^{*},\overline{x}_{i}^{*}) \\ 
+& =\frac{\sigma_{\xi}^{2}}{1-\rho^{2}}+\frac{1}{T}\cdot\frac{\sigma_{\xi}^{2}}{1-\rho^{2}}-2\cdot\frac{1}{T}\cdot\frac{\sigma_{\xi}^{2}}{1-\rho^{2}} \\
+& = \frac{T-1}{T}\cdot\frac{\sigma_{\xi}^{2}}{1-\rho^{2}}
+\end{align*}
+The probability limit is:
+$$
+\frac{Cov(y_{it}-\overline{y}_{i},x_{it}-\overline{x}_{i})}{Var(x_{it}-\overline{x}_{i})}=\frac{\beta_{1}\cdot\frac{T-1}{T}Var(x_{it}^{*})}{\frac{T-1}{T}\cdot Var(x_{it}^{*})+\frac{T-1}{T}\sigma_{v}^{2}}
+$$
+
+\subsection{e. Solution}
+$$
+\frac{\hat{\beta}_{W}}{\hat{\beta}_{FD}}\rightarrow1+\frac{\rho\sigma_{v}^{2}}{\sigma_{\xi}^{2}+\sigma_{v}^{2}}\Rightarrow\frac{\hat{\beta}_{W}-\hat{\beta}_{FD}}{\hat{\beta}_{FD}}\rightarrow\frac{\rho\sigma_{v}^{2}}{\sigma_{\xi}^{2}+\sigma_{v}^{2}}
+$$
+
+Then
+By using the estimate of $\rho$, denoted $\hat{\rho}$,
+
+$$
+\frac{\hat{\beta}_{W}-\hat{\beta}_{FD}}{\hat{\rho}\cdot\hat{\beta}_{FD}}\rightarrow\frac{\sigma_{v}^{2}}{\sigma_{\xi}^{2}+\sigma_{v}^{2}}
+$$
+
+Hence, the corrected estimator is:
+$$
+\frac{\hat{\rho}\hat{\beta}_{FD}}{(\hat{\rho}+1)\hat{\beta}_{FD}-\hat{\beta}_{W}}
+$$
+
+\subsection{f. Solution}
+Note that
+\begin{align*}
+  x_{it}-x_{it-1} & = x_{it}^{*}-x_{it-1}^{*}+v_{it}-v_{it-1} \\ 
+  & = (\rho-1)x_{it-1}^{*}+\xi_{it}+v_{it}-v_{it-1}
+\end{align*}
+In addition,
+\begin{align*}
+y_{it}-y_{it-1} & = \beta_{1}(x_{it}^{*}-x_{it-1}^{*})+e_{it}-e_{it-1} \\
+& = \beta_{1}(x_{it}-x_{it-1})-\beta_{1}(v_{it}-v_{it-1})+e_{it}-e_{it-1}
+\end{align*}
+
+\begin{align*}
+Cov(y_{it}-y_{it-1},x_{it-2}) & = 
+Cov((\rho-1)x_{it-1}^{*}+\xi_{it}+v_{it}-v_{it-1}, x_{it-2}^{*}+v_{it-2}) \\
+& = Cov(\rho x_{it-2}^{*}+\xi_{it-1}(\rho-1)+\xi_{it}+v_{it}-v_{it-1}, x_{it-2}^{*}+v_{it-2}) \\
+& = 0
+\end{align*}
+which satisfies the independence requirement.
+
+Thus,
+$x_{it-2}$ can be an instrument for FD model.
 
 %% =========== %% ========= %%
 \bibliography{../bib/notes.bib}
